@@ -19,9 +19,10 @@ class GradientBackground extends StatelessWidget {
                   0.9
                 ],
                 colors: [
-                  Colors.greenAccent,
-                  Colors.greenAccent,
-                  Colors.cyan])),
+                  Color.fromRGBO(41, 255, 198, 1),
+                  Color.fromRGBO (32, 227, 178, 1),
+                  Color.fromRGBO(12, 235, 235, 1),
+                  ])),
         child: child
     );
   }
