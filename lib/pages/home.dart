@@ -35,31 +35,13 @@ class _HomeState extends State<Home> {
                           Text("TO DO", style: TextStyle(fontWeight: FontWeight.bold),),
                           SizedBox(height: 5,),
                           WhiteTextButton(text: "Rapat", onPress: (){
-                            Navigator.push(context, 
-                            MaterialPageRoute(
-                              builder: (context){
-                                return List();
-                              },
-                              ),
-                            );
+                            Navigator.pushNamed(context, '/list');
                           }),
                           WhiteTextButton(text: "Rapat", onPress: (){
-                            Navigator.push(context, 
-                            MaterialPageRoute(
-                              builder: (context){
-                                return List();
-                              },
-                              ),
-                            );
+                            Navigator.pushNamed(context, '/list');
                           }),
                           WhiteTextButton(text: "Rapat", onPress: (){
-                            Navigator.push(context, 
-                            MaterialPageRoute(
-                              builder: (context){
-                                return List();
-                              },
-                              ),
-                            );
+                            Navigator.pushNamed(context, '/list');
                           }),
                         ],
                       )
@@ -72,13 +54,7 @@ class _HomeState extends State<Home> {
                     children: [
                     CircularIconButton(icon: Icons.settings_outlined,
                         onPress: (){
-                          Navigator.push(context, 
-                            MaterialPageRoute(
-                              builder: ((context) {
-                              return const Settings();
-                            }
-                            ),),
-                          );
+                          Navigator.pushNamed(context, '/settings');
                         }),
                     CircularIconButton(icon: Icons.add,
                         onPress: (){}),

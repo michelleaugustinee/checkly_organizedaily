@@ -40,11 +40,7 @@ class _ListState extends State<List> {
                     SizedBox(),
                     CircularIconButton(icon: Icons.edit,
                         onPress: (){
-                              Navigator.push(context, 
-                                MaterialPageRoute(
-                                  builder: (context){
-                                    return ListEdit();
-                                  }),);
+                          Navigator.pushNamed(context, '/listEdit');
                             },),
                   ],),
               ),

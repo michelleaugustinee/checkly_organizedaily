@@ -51,9 +51,10 @@ class _WhiteCheckButtonState extends State<WhiteCheckButton> {
                     child: Text(
                       widget.text,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: checked? Colors.grey : Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: widget.fontSize,
+                        decoration: checked? TextDecoration.lineThrough :  TextDecoration.none
                       ),
                     ),
                   )),
