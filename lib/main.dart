@@ -1,5 +1,6 @@
 import 'package:checkly/pages/guest.dart';
 import 'package:checkly/pages/list.dart';
+import 'package:checkly/pages/listEdit.dart';
 import 'package:checkly/pages/login.dart';
 import 'package:checkly/pages/settingGuest.dart';
 import 'package:checkly/pages/settings.dart';
@@ -8,10 +9,11 @@ import 'package:checkly/pages/home.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/settings',
+    initialRoute: '/listEdit',
     routes: {
       '/home': (context) => Home(),
       '/list': (context) => List(),
+      '/listEdit': (context) => ListEdit(),
       '/settings': (context) => Settings(),
       '/login': (context) => Login(),
       '/guest': (context) => Guest(),
@@ -22,6 +24,5 @@ void main() {
       appBarTheme: AppBarTheme(color: Colors.transparent, elevation: 0),
       scaffoldBackgroundColor: Colors.transparent,
     ),
-
   ));
 }
