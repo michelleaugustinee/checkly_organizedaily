@@ -7,8 +7,8 @@ import 'package:checkly/pages/home.dart';
 import 'package:checkly/pages/login.dart';
 import 'package:flutter/material.dart';
 
-class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingGuest extends StatelessWidget {
+  const SettingGuest({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class Settings extends StatelessWidget {
                 children: [
                   OpaqueContainerText(text: "john@gmail.com"),
                   OpaqueContainerText(text: "Edit Profile", fontSize: 40,),
-                  SizedBox(height: 5,),
+                  SizedBox(height: 10,),
                   Padding(
                     padding: EdgeInsets.only(left: 22),
                     child: Row(
@@ -85,52 +85,56 @@ class Settings extends StatelessWidget {
                     ),
                 ],
               ),
-              SizedBox(height: 170,),
+              SizedBox(height: 150,),
+              Padding(
+                padding: const EdgeInsets.only(left: 80),
+                child: Row(
+                  children: [
+                    Text("Log In with",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        ),),
+                  ],
+                ),
+              ),
+                    SizedBox(height: 10,),
               Column(
                 children: [
-                  Container(
-                        margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                        decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10))),
-                        width: MediaQuery.of(context).size.width*0.5,
-                        height: MediaQuery.of(context).size.width*0.15,
-                        child: Center(
-                          child:
-                          TextButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12), // <-- Radius
-                              ),
-                              primary: Color.fromRGBO(255,255,255,0.5),
-                              padding: EdgeInsets.all(0),
-                              onPrimary: Colors.white,
-                            ),
-                            onPressed: (){
-                              Navigator.push(context, 
-                                MaterialPageRoute(
-                                  builder: (context){
-                                    return Login();
-                                  }),);
-                            },
-                            child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                                width: double.infinity,
-                                child: Text(
-                                  "Log Out",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                  ),
-                                )
-                            ),
-                          ),
-                        ),
-                        
+                  TextButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12), // <-- Radius
+                  ),
+                  primary: Colors.white,
+                  padding: EdgeInsets.all(0),
+                  onPrimary: Colors.grey,
+                ),
+                onPressed: () {
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                width: 260,
+                child: Row(
+                  children: [
+                    Image.asset("assets/images/Google.png", width: 100,),
+                    Text(
+                    "Google",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey.shade400,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20,
                       ),
+                    ),
+                  ],
+                ),
+              ),
+              ),
                 ],
               ),
+              SizedBox(height: 20,),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                 child: Row(
