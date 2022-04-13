@@ -3,6 +3,7 @@ import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/white_check_button.dart';
+import 'package:checkly/pages/listEdit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -38,7 +39,13 @@ class _ListState extends State<List> {
                   children: [
                     SizedBox(),
                     CircularIconButton(icon: Icons.edit,
-                        onPress: (){}),
+                        onPress: (){
+                              Navigator.push(context, 
+                                MaterialPageRoute(
+                                  builder: (context){
+                                    return ListEdit();
+                                  }),);
+                            },),
                   ],),
               ),
               SizedBox(height: 30,)

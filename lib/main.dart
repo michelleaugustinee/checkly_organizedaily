@@ -9,7 +9,7 @@ import 'package:checkly/pages/home.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/listEdit',
+    initialRoute: '/login',
     routes: {
       '/home': (context) => Home(),
       '/list': (context) => List(),

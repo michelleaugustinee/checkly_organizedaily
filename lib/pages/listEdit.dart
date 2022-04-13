@@ -18,7 +18,7 @@ class _ListEditState extends State<ListEdit> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: Text("CHEKLY LOGO"),
+          title: Image.asset("assets/images/ChecklyLogo.png"),
           centerTitle: true,
         ),
         body: SafeArea(
@@ -41,7 +41,9 @@ class _ListEditState extends State<ListEdit> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CircularIconButton(icon: Icons.add, onPress: () {}),
-                    CircularIconButton(icon: Icons.edit, onPress: () {}),
+                    CircularIconButton(icon: Icons.edit, onPress: () {
+                      Navigator.pop(context);
+                    }),
                   ],
                 ),
               ),
