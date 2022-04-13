@@ -3,6 +3,8 @@ import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/white_check_button.dart';
+import 'package:checkly/pages/home.dart';
+import 'package:checkly/pages/login.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatelessWidget {
@@ -47,7 +49,13 @@ class Settings extends StatelessWidget {
                               padding: EdgeInsets.all(0),
                               onPrimary: Colors.white,
                         ),
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(context, 
+                            MaterialPageRoute(
+                              builder: (context){
+                                return Home();
+                              }),);
+                        },
                             child: Container(
                                 width: double.infinity,
                                 child: Text(
@@ -85,7 +93,13 @@ class Settings extends StatelessWidget {
                               padding: EdgeInsets.all(0),
                               onPrimary: Colors.white,
                             ),
-                            onPressed: (){},
+                            onPressed: (){
+                              Navigator.push(context, 
+                                MaterialPageRoute(
+                                  builder: (context){
+                                    return Login();
+                                  }),);
+                            },
                             child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
                                 width: double.infinity,

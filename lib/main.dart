@@ -1,15 +1,17 @@
 import 'package:checkly/pages/list.dart';
+import 'package:checkly/pages/login.dart';
 import 'package:checkly/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:checkly/pages/home.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/home',
+    initialRoute: '/login',
     routes: {
       '/home': (context) => Home(),
       '/list': (context) => List(),
-      '/settings':(context) => Settings(),
+      '/settings': (context) => Settings(),
+      '/login': (context) => Login(),
     },
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
