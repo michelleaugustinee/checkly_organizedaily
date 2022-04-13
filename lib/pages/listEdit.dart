@@ -1,4 +1,5 @@
 import 'package:checkly/components/circular_icon_button.dart';
+import 'package:checkly/components/dialogs.dart';
 import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/opaque_container_text.dart';
@@ -16,6 +17,7 @@ class _ListEditState extends State<ListEdit> {
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: Image.asset("assets/images/ChecklyLogo.png"),
@@ -29,9 +31,9 @@ class _ListEditState extends State<ListEdit> {
                 child: OpaqueContainerChild(
                     child: Column(
                   children: [
-                    TrashFillButton(text: "test"),
-                    TrashFillButton(text: "test"),
-                    TrashFillButton(text: "test"),
+                    TrashFillButton(text: "test", textOnPress: (){},trashOnPress: (){},),
+                    TrashFillButton(text: "test", textOnPress: (){},trashOnPress: (){},),
+                    TrashFillButton(text: "test", textOnPress: (){},trashOnPress: (){},),
                   ],
                 )),
               ),
@@ -40,9 +42,27 @@ class _ListEditState extends State<ListEdit> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CircularIconButton(icon: Icons.add, onPress: () {}),
-                    CircularIconButton(icon: Icons.edit, onPress: () {
-                      Navigator.pop(context);
+                    CircularIconButton(icon: Icons.add, onPress: () {
+                      showTextFieldDialog(
+                          context: context,
+                          title: "Add Task",
+                          label: "Task Name",
+                          onPress: (){
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          }
+                      );
+                    }),
+                    CircularIconButton(icon: Icons.check, onPress: (){
+                      showConfirmationdDialog(
+                          context: context,
+                          title: "Confirm Edit",
+                          label: "Are you sure with your edit?",
+                          onPress: (){
+                            Navigator.pushNamedAndRemoveUntil(context, '/list',  ModalRoute.withName('/home'));
+                          }
+                      );
                     }),
                   ],
                 ),

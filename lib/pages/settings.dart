@@ -4,6 +4,7 @@ import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_center_button.dart';
 import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/opaque_container_text.dart';
+import 'package:checkly/components/opaque_text_field.dart';
 import 'package:checkly/components/white_check_button.dart';
 import 'package:checkly/pages/home.dart';
 import 'package:checkly/pages/login.dart';
@@ -23,6 +24,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         extendBodyBehindAppBar: true,
         appBar: AppBar(title: Image.asset("assets/images/ChecklyLogo.png"), centerTitle: true,),
         body: SafeArea(
@@ -48,7 +50,10 @@ class _SettingsState extends State<Settings> {
                       ],
                     ),
                     ),
-                  OpaqueContainerText(text: "John", fontSize: 35,),
+                  OpaqueTextField(
+                    hintText: "Name",
+                    onChange: (value){},
+                  ),
                   SizedBox(height: 10,),
                   Container(
                     padding: EdgeInsets.only(right: 20),

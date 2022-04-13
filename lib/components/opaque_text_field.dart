@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class OpaqueTextField extends StatelessWidget {
   final String hintText;
-  const OpaqueTextField({Key? key, required this.hintText}) : super(key: key);
+  final textFieldController = TextEditingController();
+  final dynamic onChange;
+  OpaqueTextField({Key? key, required this.hintText, required this.onChange}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,8 @@ class OpaqueTextField extends StatelessWidget {
           ),
           border: InputBorder.none,
         ),
+        controller: textFieldController,
+        onChanged: onChange,
       ),
     );
   }

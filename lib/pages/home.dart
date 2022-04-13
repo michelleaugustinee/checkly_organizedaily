@@ -1,3 +1,4 @@
+import 'package:checkly/components/dialogs.dart';
 import 'package:checkly/pages/list.dart';
 import 'package:checkly/pages/settings.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         extendBodyBehindAppBar: true,
         appBar: AppBar(title: Image.asset("assets/images/ChecklyLogo.png"), centerTitle: true,),
         body: SafeArea(
@@ -57,7 +59,19 @@ class _HomeState extends State<Home> {
                           Navigator.pushNamed(context, '/settings');
                         }),
                     CircularIconButton(icon: Icons.add,
-                        onPress: (){}),
+                        onPress: (){
+                          showTextFieldDialog(
+                            context:context,
+                            title: "Create New List",
+                            label: "List Name",
+                            onPress: (){
+
+                              setState(() {
+                                Navigator.pop(context);
+                              });
+                            }
+                          );
+                        }),
                   ],),
                 ),
                 SizedBox(height: 30,)

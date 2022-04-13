@@ -5,12 +5,14 @@ import 'package:checkly/pages/home.dart';
 import 'package:flutter/material.dart';
 
 class Guest extends StatelessWidget {
-  const Guest({Key? key}) : super(key: key);
+  String test = "";
+  Guest({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         extendBodyBehindAppBar: true,
         appBar: AppBar(title: Image.asset("assets/images/ChecklyLogo.png"), centerTitle: true,),
         body: SafeArea(child: 
@@ -26,7 +28,12 @@ class Guest extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30,),
-              OpaqueTextField(hintText: "Name",),
+              OpaqueTextField(
+                hintText: "Name",
+                onChange: (value){
+                  test = value;
+                  print(test);
+                },),
               SizedBox(height: 30,),
               OpaqueCenterButton(text: "Apply", onPress: (){
                 Navigator.popAndPushNamed(context, '/home');

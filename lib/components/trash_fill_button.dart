@@ -5,8 +5,15 @@ import 'package:cupertino_icons/cupertino_icons.dart';
 class TrashFillButton extends StatefulWidget {
   final double fontSize;
   final String text;
+  final textOnPress;
+  final trashOnPress;
 
-  TrashFillButton({Key? key, this.fontSize = 20, required this.text})
+  TrashFillButton({Key? key,
+    this.fontSize = 20,
+    required this.text,
+    required this.textOnPress,
+    required this.trashOnPress
+  })
       : super(key: key);
 
   @override
@@ -17,25 +24,22 @@ class _TrashFillButtonState extends State<TrashFillButton> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-      child: TextButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12), // <-- Radius
-          ),
-          onPrimary: Color.fromRGBO(32, 227, 178, 1),
-          padding: EdgeInsets.all(0),
-          // primary: Colors.white,
-        ),
-        onPressed: () {
-          setState(() {});
-        },
-        child: Row(
-          children: [
-            Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: TextButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                ),
+                onPrimary: Color.fromRGBO(32, 227, 178, 1),
+                primary: Colors.white,
+                padding: EdgeInsets.all(0),
+                // primary: Colors.white,
+              ),
+              onPressed: widget.textOnPress,
               child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   margin: EdgeInsets.only(right: 15),
                   // width: double.infinity,
@@ -50,13 +54,19 @@ class _TrashFillButtonState extends State<TrashFillButton> {
                     ),
                   )),
             ),
-            Icon(
+          ),
+          SizedBox(width: 5),
+          InkWell(
+            borderRadius: BorderRadius.circular(15),
+            onTap: widget.trashOnPress,
+            splashColor: Colors.white,
+            child: Icon(
               CupertinoIcons.trash_fill,
-              size: 50,
+              size: 45,
               color: Colors.white,
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

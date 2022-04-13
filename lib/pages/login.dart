@@ -11,6 +11,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         body: SafeArea(
           child: Column(
             children: [

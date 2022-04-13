@@ -17,6 +17,7 @@ class _ListState extends State<List> {
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         extendBodyBehindAppBar: true,
         appBar: AppBar(title: Image.asset("assets/images/ChecklyLogo.png"), centerTitle: true,),
         body: SafeArea(
