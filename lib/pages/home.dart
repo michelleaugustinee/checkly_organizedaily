@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/opaque_container_child.dart';
-import 'package:checkly/components/white_container_text.dart';
+import 'package:checkly/components/white_text_button.dart';
 import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/circular_icon_button.dart';
 
@@ -32,9 +32,9 @@ class _HomeState extends State<Home> {
                         children: [
                           Text("TO DO", style: TextStyle(fontWeight: FontWeight.bold),),
                           SizedBox(height: 5,),
-                          WhiteContainerText(text: "Rapat"),
-                          WhiteContainerText(text: "Rapat"),
-                          WhiteContainerText(text: "Rapat"),
+                          WhiteTextButton(text: "Rapat", onPress: (){}),
+                          WhiteTextButton(text: "Rapat", onPress: (){}),
+                          WhiteTextButton(text: "Rapat", onPress: (){}),
                         ],
                       )
                   ),
