@@ -17,7 +17,7 @@ class _ListState extends State<List> {
     return GradientBackground(
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: AppBar(title: Text("CHEKLY LOGO"),centerTitle: true,),
+        appBar: AppBar(title: Image.asset("assets/images/ChecklyLogo.png"), centerTitle: true,),
         body: SafeArea(
           child: Column(
             children: [

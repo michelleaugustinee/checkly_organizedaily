@@ -1,3 +1,5 @@
+import 'package:checkly/pages/list.dart';
+import 'package:checkly/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/opaque_container_child.dart';
@@ -18,7 +20,7 @@ class _HomeState extends State<Home> {
     return GradientBackground(
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: AppBar(title: Text("CHEKLY LOGO"),centerTitle: true,),
+        appBar: AppBar(title: Image.asset("assets/images/ChecklyLogo.png"), centerTitle: true,),
         body: SafeArea(
             child: Column(
               children: [
@@ -32,9 +34,33 @@ class _HomeState extends State<Home> {
                         children: [
                           Text("TO DO", style: TextStyle(fontWeight: FontWeight.bold),),
                           SizedBox(height: 5,),
-                          WhiteTextButton(text: "Rapat", onPress: (){}),
-                          WhiteTextButton(text: "Rapat", onPress: (){}),
-                          WhiteTextButton(text: "Rapat", onPress: (){}),
+                          WhiteTextButton(text: "Rapat", onPress: (){
+                            Navigator.push(context, 
+                            MaterialPageRoute(
+                              builder: (context){
+                                return List();
+                              },
+                              ),
+                            );
+                          }),
+                          WhiteTextButton(text: "Rapat", onPress: (){
+                            Navigator.push(context, 
+                            MaterialPageRoute(
+                              builder: (context){
+                                return List();
+                              },
+                              ),
+                            );
+                          }),
+                          WhiteTextButton(text: "Rapat", onPress: (){
+                            Navigator.push(context, 
+                            MaterialPageRoute(
+                              builder: (context){
+                                return List();
+                              },
+                              ),
+                            );
+                          }),
                         ],
                       )
                   ),
@@ -45,7 +71,15 @@ class _HomeState extends State<Home> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                     CircularIconButton(icon: Icons.settings_outlined,
-                        onPress: (){}),
+                        onPress: (){
+                          Navigator.push(context, 
+                            MaterialPageRoute(
+                              builder: ((context) {
+                              return const Settings();
+                            }
+                            ),),
+                          );
+                        }),
                     CircularIconButton(icon: Icons.add,
                         onPress: (){}),
                   ],),
