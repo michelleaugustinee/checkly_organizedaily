@@ -1,4 +1,5 @@
 import 'package:checkly/components/circular_icon_button.dart';
+import 'package:checkly/components/dialogs.dart';
 import 'package:checkly/components/google_button.dart';
 import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_center_button.dart';
@@ -60,7 +61,16 @@ class _SettingsState extends State<Settings> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        OpaqueCenterButton(text: "Apply", onPress: (){})
+                        OpaqueCenterButton(text: "Apply", onPress: (){
+                          showConfirmationdDialog(
+                          context: context,
+                          title: "Confirm Edit",
+                          label: "Are you sure with your edit?",
+                          onPress: (){
+                            Navigator.pushNamedAndRemoveUntil(context, '/home',  ((route) => false));
+                          }
+                      );
+                        })
                       ],
                     ),
                   ),
