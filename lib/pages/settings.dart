@@ -21,64 +21,79 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool guest = false;
-  String username  = "";
+  String username = "";
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
-        resizeToAvoidBottomInset : false,
+        resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: true,
-        appBar: AppBar(title: Image.asset("assets/images/ChecklyLogo.png"), centerTitle: true,),
+        appBar: AppBar(
+          title: Image.asset("assets/images/ChecklyLogo.png"),
+          centerTitle: true,
+        ),
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
-
                 children: [
-                  guest? SizedBox.shrink() : OpaqueContainerText(text: "john@gmail.com"),
-                  OpaqueContainerText(text: "Edit Profile", fontSize: 40,),
-                  SizedBox(height: 5,),
+                  guest
+                      ? SizedBox.shrink()
+                      : OpaqueContainerText(text: "john@gmail.com"),
+                  OpaqueContainerText(
+                    text: "Edit Profile",
+                    fontSize: 40,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Padding(
                     padding: EdgeInsets.only(left: 22),
                     child: Row(
                       children: [
-                        Text("Edit Name",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                          color: Colors.white,
-                          ),),
+                        Text(
+                          "Edit Name",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
-                    ),
+                  ),
                   FutureBuilder(
                       future: SharedPreferenceUtil().getName(),
                       builder: (context, snapshot) {
                         return OpaqueTextField(
                           hintText: snapshot.data.toString(),
-                          onChange: (value){
+                          onChange: (value) {
                             username = value;
                           },
                         );
                       }),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
                     padding: EdgeInsets.only(right: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        OpaqueCenterButton(text: "Apply", onPress: (){
-                          showConfirmationdDialog(
-                          context: context,
-                          title: "Confirm Edit",
-                          label: "Are you sure with your edit?",
-                          onPress: (){
-                            SharedPreferenceUtil().saveName(username);
-                            Navigator.pushNamedAndRemoveUntil(context, '/home',  ((route) => false));
-                          }
-                      );
-                        })
+                        OpaqueCenterButton(
+                            text: "Apply",
+                            onPress: () {
+                              showConfirmationdDialog(
+                                  context: context,
+                                  title: "Confirm Edit",
+                                  label: "Are you sure with your edit?",
+                                  onPress: () {
+                                    SharedPreferenceUtil().saveName(username);
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, '/home', ((route) => false));
+                                  });
+                            })
                       ],
                     ),
                   ),
@@ -86,35 +101,44 @@ class _SettingsState extends State<Settings> {
               ),
               Column(
                 children: [
-                  guest? Text("Log In with",style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),)
+                  guest
+                      ? Text(
+                          "Log In with",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        )
                       : SizedBox.shrink(),
-                  SizedBox(height: 10,),
-                  guest? GoogleButton(onPress: (){
-                    setState(() {guest = false;});
-                  },)
-                  : OpaqueCenterButton(
-                      text: "Log Out",
-                      onPress:(){
-                        setState(() {guest = true;});
-                      }),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  guest
+                      ? GoogleSignInButton()
+                      : OpaqueCenterButton(
+                          text: "Log Out",
+                          onPress: () {
+                            setState(() {
+                              guest = true;
+                            });
+                          }),
                   SizedBox(height: 20),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CircularIconButton(icon: Icons.settings_outlined,
-                            onPress: (){
+                        CircularIconButton(
+                            icon: Icons.settings_outlined,
+                            onPress: () {
                               Navigator.pop(context);
                             }),
-                      ],),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 30,)
+                  SizedBox(
+                    height: 30,
+                  )
                 ],
               ),
-
             ],
           ),
         ),

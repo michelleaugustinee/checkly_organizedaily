@@ -8,7 +8,7 @@ import 'package:checkly/pages/home.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/guest',
+    initialRoute: '/login',
     routes: {
       '/login': (context) => Login(),
       '/home': (context) => Home(),
@@ -16,7 +16,6 @@ void main() {
       '/listEdit': (context) => ListEdit(),
       '/settings': (context) => Settings(),
       '/guest': (context) => Guest(),
-
     },
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
