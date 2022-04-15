@@ -2,11 +2,14 @@ import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_center_button.dart';
 import 'package:checkly/components/opaque_text_field.dart';
 import 'package:checkly/pages/home.dart';
+import 'package:checkly/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Guest extends StatelessWidget {
-  String test = "";
+  String userName = "";
   Guest({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class Guest extends StatelessWidget {
         resizeToAvoidBottomInset : false,
         extendBodyBehindAppBar: true,
         appBar: AppBar(title: Image.asset("assets/images/ChecklyLogo.png"), centerTitle: true,),
-        body: SafeArea(child: 
+        body: SafeArea(child:
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,11 +34,11 @@ class Guest extends StatelessWidget {
               OpaqueTextField(
                 hintText: "Name",
                 onChange: (value){
-                  test = value;
-                  print(test);
+                  userName = value;
                 },),
               SizedBox(height: 30,),
-              OpaqueCenterButton(text: "Apply", onPress: (){
+              OpaqueCenterButton(text: "Apply", onPress: ()async{
+                SharedPreferenceUtil().saveName(userName.toString());
                 Navigator.popAndPushNamed(context, '/home');
               })
             ],

@@ -1,6 +1,7 @@
 import 'package:checkly/components/dialogs.dart';
 import 'package:checkly/pages/list.dart';
 import 'package:checkly/pages/settings.dart';
+import 'package:checkly/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/opaque_container_child.dart';
@@ -16,6 +17,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  
+
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
@@ -26,7 +29,12 @@ class _HomeState extends State<Home> {
         body: SafeArea(
             child: Column(
               children: [
-                OpaqueContainerText(text: "Hello John :)", fontSize: 40,),
+                FutureBuilder(
+                  future: SharedPreferenceUtil().getName(),
+                    builder: (context, snapshot) {
+                  return OpaqueContainerText(text: "Hello ${snapshot.data.toString()} :)", fontSize: 40,);
+                }),
+
                 OpaqueContainerText(text: "Tuesday, 19 MArch 2022", fontSize: 20,),
                 Expanded(
                   child: OpaqueContainerChild(

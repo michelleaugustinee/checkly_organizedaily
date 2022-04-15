@@ -9,6 +9,7 @@ import 'package:checkly/components/opaque_text_field.dart';
 import 'package:checkly/components/white_check_button.dart';
 import 'package:checkly/pages/home.dart';
 import 'package:checkly/pages/login.dart';
+import 'package:checkly/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatefulWidget {
@@ -20,7 +21,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool guest = false;
-
+  String username  = "";
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
@@ -51,10 +52,16 @@ class _SettingsState extends State<Settings> {
                       ],
                     ),
                     ),
-                  OpaqueTextField(
-                    hintText: "Name",
-                    onChange: (value){},
-                  ),
+                  FutureBuilder(
+                      future: SharedPreferenceUtil().getName(),
+                      builder: (context, snapshot) {
+                        return OpaqueTextField(
+                          hintText: snapshot.data.toString(),
+                          onChange: (value){
+                            username = value;
+                          },
+                        );
+                      }),
                   SizedBox(height: 10,),
                   Container(
                     padding: EdgeInsets.only(right: 20),
@@ -67,6 +74,7 @@ class _SettingsState extends State<Settings> {
                           title: "Confirm Edit",
                           label: "Are you sure with your edit?",
                           onPress: (){
+                            SharedPreferenceUtil().saveName(username);
                             Navigator.pushNamedAndRemoveUntil(context, '/home',  ((route) => false));
                           }
                       );
