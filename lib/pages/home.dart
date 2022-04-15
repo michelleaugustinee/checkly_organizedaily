@@ -1,4 +1,5 @@
 import 'package:checkly/components/dialogs.dart';
+import 'package:checkly/model/todo.dart';
 import 'package:checkly/pages/list.dart';
 import 'package:checkly/pages/settings.dart';
 import 'package:checkly/utils/shared_preference.dart';
@@ -17,7 +18,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +53,16 @@ class _HomeState extends State<Home> {
                           WhiteTextButton(text: "Rapat", onPress: (){
                             Navigator.pushNamed(context, '/list');
                           }),
+                          // ListView.builder(
+                          //   physics: BouncingScrollPhysics(),
+                          //   itemCount: todos.length,
+                          //   itemBuilder: (context, index) => WhiteTextButton(
+                          //     itemIndex: index, 
+                          //     todos: todos[index], 
+                          //     onPress: (){
+                          //   Navigator.pushNamed(context, '/list');
+                          // }),
+                          // ),
                         ],
                       )
                   ),

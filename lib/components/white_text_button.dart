@@ -1,12 +1,18 @@
+import 'package:checkly/model/todo.dart';
 import 'package:flutter/material.dart';
 
 class WhiteTextButton extends StatelessWidget {
 
   final double fontSize;
-  final String text;
   final dynamic onPress;
+  final String text;
+  // final Todo todos;
+  // final int itemIndex;
 
-  const WhiteTextButton({Key? key, this.fontSize = 20, required this.text, required this.onPress}) : super(key: key);
+  const WhiteTextButton({Key? key, this.fontSize = 20, 
+  required this.text,
+  // required this.itemIndex,required this.todos, 
+  required this.onPress,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +33,7 @@ class WhiteTextButton extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 15,horizontal: 15),
             width: double.infinity,
             child: Text(
+              // todos.title,
               text,
               style: TextStyle(
                 color: Colors.black,
