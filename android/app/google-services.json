@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "423031049420",
+    "project_id": "checkly-b25d3",
+    "storage_bucket": "checkly-b25d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423031049420:android:85362d43d7362efcea4669",
+        "android_client_info": {
+          "package_name": "com.example.checkly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423031049420-tbgagacos67j18rqof84ptqud3mltdqk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.checkly",
+            "certificate_hash": "554df803e07660cba47803242f5ba18981637030"
+          }
+        },
+        {
+          "client_id": "423031049420-bp8dhq7678ofq1krdoflqojdsnpi25qi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbs2c9HzY1rbRh8agRJpp1HFr-Z8WSD-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423031049420-bp8dhq7678ofq1krdoflqojdsnpi25qi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
