@@ -12,6 +12,8 @@ import 'package:checkly/pages/login.dart';
 import 'package:checkly/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
 
+import '../auth/authentication.dart';
+
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
 
@@ -20,6 +22,26 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  bool _isSigningOut = false;
+  Route _routeToSignInScreen() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => Login(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(-1.0, 0.0);
+        var end = Offset.zero;
+        var curve = Curves.ease;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
   bool guest = false;
   String username = "";
   @override
@@ -115,11 +137,18 @@ class _SettingsState extends State<Settings> {
                       ? GoogleSignInButton()
                       : OpaqueCenterButton(
                           text: "Log Out",
-                          onPress: () {
+                          onPress: () async {
                             setState(() {
-                              guest = true;
+                              _isSigningOut = true;
                             });
-                          }),
+                            await Authentication.signOut(context: context);
+                            setState(() {
+                              _isSigningOut = false;
+                            });
+                            Navigator.of(context)
+                                .pushReplacement(_routeToSignInScreen());
+                          },
+                        ),
                   SizedBox(height: 20),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
