@@ -5,17 +5,22 @@ showTextFieldDialog({context, title, label, onPress}){
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
               scrollable: true,
-              title: Text(title),
+              title: Center(child: Text(title)),
               content: Container(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
                   child: TextFormField(
+
                     cursorColor: Colors.grey,
                     decoration: InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                       ),
+
                       labelText: label,
                       labelStyle: TextStyle(
                         color: Colors.grey,
@@ -48,6 +53,9 @@ showConfirmationdDialog({context, title, label, onPress}){
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           scrollable: true,
           title: Text(title),
           content: Container(

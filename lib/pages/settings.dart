@@ -90,6 +90,7 @@ class _SettingsState extends State<Settings> {
                       builder: (context, snapshot) {
                         return OpaqueTextField(
                           hintText: snapshot.data.toString(),
+                          initialText: snapshot.data.toString(),
                           onChange: (value) {
                             username = value;
                           },

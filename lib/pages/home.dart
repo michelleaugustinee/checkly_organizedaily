@@ -9,7 +9,7 @@ import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/white_text_button.dart';
 import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/circular_icon_button.dart';
-
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
+  final DateTime now = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
                   return OpaqueContainerText(text: "Hello ${snapshot.data.toString()} :)", fontSize: 40,);
                 }),
 
-                OpaqueContainerText(text: "Tuesday, 19 MArch 2022", fontSize: 20,),
+                OpaqueContainerText(text: DateFormat('EEEE, d MMMM y').format(now), fontSize: 20,),
                 Expanded(
                   child: OpaqueContainerChild(
                       child: Column(
@@ -44,25 +44,17 @@ class _HomeState extends State<Home> {
                         children: [
                           Text("TO DO", style: TextStyle(fontWeight: FontWeight.bold),),
                           SizedBox(height: 5,),
-                          WhiteTextButton(text: "Rapat", onPress: (){
-                            Navigator.pushNamed(context, '/list');
-                          }),
-                          WhiteTextButton(text: "Rapat", onPress: (){
-                            Navigator.pushNamed(context, '/list');
-                          }),
-                          WhiteTextButton(text: "Rapat", onPress: (){
-                            Navigator.pushNamed(context, '/list');
-                          }),
-                          // ListView.builder(
-                          //   physics: BouncingScrollPhysics(),
-                          //   itemCount: todos.length,
-                          //   itemBuilder: (context, index) => WhiteTextButton(
-                          //     itemIndex: index, 
-                          //     todos: todos[index], 
-                          //     onPress: (){
-                          //   Navigator.pushNamed(context, '/list');
-                          // }),
-                          // ),
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: todos.length,
+                                itemBuilder: (context, index){
+                                  return WhiteTextButton(
+                                      text: todos[index].title,
+                                      onPress: (){
+                                        Navigator.pushNamed(context, '/list');
+                                      });
+                                }),
+                          ),
                         ],
                       )
                   ),
@@ -83,7 +75,6 @@ class _HomeState extends State<Home> {
                             title: "Create New List",
                             label: "List Name",
                             onPress: (){
-
                               setState(() {
                                 Navigator.pop(context);
                               });

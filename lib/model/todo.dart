@@ -17,7 +17,7 @@ List<Todo> todos = [
   ),
   Todo(
     createdTime: DateTime.now(), 
-    title: 'Rapat',
+    title: 'Rapat2',
   ),
   Todo(
     createdTime: DateTime.now(), 

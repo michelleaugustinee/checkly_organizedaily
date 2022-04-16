@@ -35,10 +35,10 @@ class Guest extends StatelessWidget {
                 hintText: "Name",
                 onChange: (value){
                   userName = value;
+                  SharedPreferenceUtil().saveName(userName.toString());
                 },),
               SizedBox(height: 30,),
               OpaqueCenterButton(text: "Apply", onPress: ()async{
-                SharedPreferenceUtil().saveName(userName.toString());
                 Navigator.popAndPushNamed(context, '/home');
               })
             ],
