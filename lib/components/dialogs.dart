@@ -48,6 +48,53 @@ showTextFieldDialog({context, title, label, onPress}){
           });
 }
 
+showEditTextFieldDialog({context, title, initialText, label, onPress}){
+  final _textFieldController = TextEditingController();
+  _textFieldController.text = initialText;
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          scrollable: true,
+          title: Center(child: Text(title)),
+          content: Container(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              child: TextFormField(
+                controller: _textFieldController,
+                cursorColor: Colors.grey,
+                decoration: InputDecoration(
+                  labelText: label,
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                    decorationColor: Color.fromRGBO(32, 227, 178, 1),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  onPrimary: Colors.white,
+                  padding: EdgeInsets.all(0),
+                  primary: Color.fromRGBO(32, 227, 178, 1),
+                ),
+                child: Text("Add"),
+                onPressed: onPress)
+          ],
+        );
+      });
+}
 showConfirmationdDialog({context, title, label, onPress}){
   showDialog(
       context: context,

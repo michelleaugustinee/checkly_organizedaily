@@ -4,6 +4,7 @@ import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/trash_fill_button.dart';
+import 'package:checkly/model/todo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -29,13 +30,27 @@ class _ListEditState extends State<ListEdit> {
               OpaqueContainerText(text: "Shopping List"),
               Expanded(
                 child: OpaqueContainerChild(
-                    child: Column(
-                  children: [
-                    TrashFillButton(text: "test", textOnPress: (){},trashOnPress: (){},),
-                    TrashFillButton(text: "test", textOnPress: (){},trashOnPress: (){},),
-                    TrashFillButton(text: "test", textOnPress: (){},trashOnPress: (){},),
-                  ],
-                )),
+                    child: Expanded(
+                      child: ListView.builder(
+                          itemCount: todos.length,
+                          itemBuilder: (context, index){
+                            return TrashFillButton(
+                              text: todos[index].title,
+                              textOnPress: (){
+                                showEditTextFieldDialog(context: context,
+                                    title: "Edit Task",
+                                    label: "Task Name",
+                                    initialText: todos[index].title,
+                                    onPress: (){
+                                      setState(() {
+                                        Navigator.pop(context);
+                                      });
+                                    }
+                                );
+                              },
+                              trashOnPress: (){},);
+                          }),
+                    )),
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

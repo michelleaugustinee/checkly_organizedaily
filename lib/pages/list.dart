@@ -3,6 +3,7 @@ import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/white_check_button.dart';
+import 'package:checkly/model/todo.dart';
 import 'package:checkly/pages/listEdit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -26,12 +27,13 @@ class _ListState extends State<List> {
               OpaqueContainerText(text: "Shopping List"),
               Expanded(
                 child: OpaqueContainerChild(
-                    child: Column(
-                      children: [
-                        WhiteCheckButton(text: "test"),
-                        WhiteCheckButton(text: "test"),
-                        WhiteCheckButton(text: "test"),
-                      ],)),
+                    child: Expanded(
+                      child: ListView.builder(
+                          itemCount: todos.length,
+                          itemBuilder: (context, index){
+                            return WhiteCheckButton(text: todos[index].title);
+                          }),
+                    )),
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
