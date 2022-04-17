@@ -1,21 +1,27 @@
 import 'package:checkly/model/todo.dart';
 import 'package:flutter/material.dart';
 
-class WhiteTextButton extends StatelessWidget {
+class WhiteTextCard extends StatelessWidget {
 
   final double fontSize;
   final dynamic onPress;
   final String text;
 
-
-  const WhiteTextButton({Key? key, this.fontSize = 20, 
+  const WhiteTextCard({Key? key, this.fontSize = 20,
   required this.text,
-  required this.onPress,}) : super(key: key);
+  required this.onPress,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Card(
+      key: key,
       margin: EdgeInsets.symmetric(vertical: 10,horizontal: 0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
+      ),
       child: TextButton(
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -24,7 +30,6 @@ class WhiteTextButton extends StatelessWidget {
           onPrimary: Color.fromRGBO(32, 227, 178, 1),
           padding: EdgeInsets.all(0),
           primary: Colors.white,
-
         ),
         onPressed: onPress,
         child: Container(

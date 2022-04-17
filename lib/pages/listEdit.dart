@@ -5,8 +5,11 @@ import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/trash_fill_button.dart';
 import 'package:checkly/model/todo.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+import '../components/white_check_button.dart';
 
 class ListEdit extends StatefulWidget {
   @override
@@ -16,9 +19,11 @@ class ListEdit extends StatefulWidget {
 class _ListEditState extends State<ListEdit> {
   @override
   Widget build(BuildContext context) {
+    CollectionReference test = FirebaseFirestore.instance.collection("test");
+
     return GradientBackground(
       child: Scaffold(
-        resizeToAvoidBottomInset : false,
+        resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           title: Image.asset("assets/images/ChecklyLogo.png"),
@@ -30,55 +35,92 @@ class _ListEditState extends State<ListEdit> {
               OpaqueContainerText(text: "Shopping List"),
               Expanded(
                 child: OpaqueContainerChild(
-                    child: Expanded(
-                      child: ListView.builder(
-                          itemCount: todos.length,
-                          itemBuilder: (context, index){
-                            return TrashFillButton(
-                              text: todos[index].title,
-                              textOnPress: (){
-                                showEditTextFieldDialog(context: context,
-                                    title: "Edit Task",
-                                    label: "Task Name",
-                                    initialText: todos[index].title,
-                                    onPress: (){
-                                      setState(() {
-                                        Navigator.pop(context);
-                                      });
-                                    }
-                                );
-                              },
-                              trashOnPress: (){},);
-                          }),
-                    )),
+                  child: StreamBuilder(
+                    stream: test.snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: Text("Loading"),
+                        );
+                      }
+                      return ListView(
+                        children: snapshot.data!.docs.map((task) {
+                          // return WhiteCheckButton(text: task['name']);
+                          return TrashFillButton(
+                            text: task['name'],
+                            textOnPress: () {
+                              showEditTextFieldDialog(
+                                  context: context,
+                                  title: "Edit Task",
+                                  label: "Task Name",
+                                  initialText: task['name'],
+                                  onPress: () {
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  });
+                            },
+                            trashOnPress: () {
+                              test.doc('pwFQ88qKUlia18ma33N5').delete();
+                            },
+                          );
+                        }).toList(),
+                      );
+                    },
+                  ),
+                  // child: Expanded(
+                  //   child: ListView.builder(
+                  //       itemCount: todos.length,
+                  //       itemBuilder: (context, index){
+                  //         return TrashFillButton(
+                  //           text: todos[index].title,
+                  //           textOnPress: (){
+                  //             showEditTextFieldDialog(context: context,
+                  //                 title: "Edit Task",
+                  //                 label: "Task Name",
+                  //                 initialText: todos[index].title,
+                  //                 onPress: (){
+                  //                   setState(() {
+                  //                     Navigator.pop(context);
+                  //                   });
+                  //                 }
+                  //             );
+                  //           },
+                  //           trashOnPress: (){},);
+                  //       }),
+                  // )
+                ),
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CircularIconButton(icon: Icons.add, onPress: () {
-                      showTextFieldDialog(
-                          context: context,
-                          title: "Add Task",
-                          label: "Task Name",
-                          onPress: (){
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          }
-                      );
-                    }),
-                    CircularIconButton(icon: Icons.check, onPress: (){
-                      showConfirmationdDialog(
-                          context: context,
-                          title: "Confirm Edit",
-                          label: "Are you sure with your edit?",
-                          onPress: (){
-                            Navigator.pushNamedAndRemoveUntil(context, '/list',  ModalRoute.withName('/home'));
-                          }
-                      );
-                    }),
+                    CircularIconButton(
+                        icon: Icons.add,
+                        onPress: () {
+                          showTextFieldDialog(
+                              context: context,
+                              title: "Add Task",
+                              label: "Task Name",
+                              onPress: () {
+                                setState(() {
+                                  Navigator.pop(context);
+                                });
+                              });
+                        }),
+                    CircularIconButton(
+                        icon: Icons.check,
+                        onPress: () {
+                          showConfirmationdDialog(
+                              context: context,
+                              title: "Confirm Edit",
+                              label: "Are you sure with your edit?",
+                              onPress: () {
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    '/list', ModalRoute.withName('/home'));
+                              });
+                        }),
                   ],
                 ),
               ),

@@ -111,8 +111,8 @@ class _SettingsState extends State<Settings> {
                                   context: context,
                                   title: "Confirm Edit",
                                   label: "Are you sure with your edit?",
-                                  onPress: () {
-                                    SharedPreferenceUtil().saveName(username);
+                                  onPress: () async{
+                                    await SharedPreferenceUtil().saveName(username);
                                     Navigator.pushNamedAndRemoveUntil(
                                         context, '/home', ((route) => false));
                                   });

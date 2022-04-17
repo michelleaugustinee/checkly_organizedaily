@@ -1,54 +1,62 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-showTextFieldDialog({context, title, label, onPress}){
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              scrollable: true,
-              title: Center(child: Text(title)),
-              content: Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Form(
-                  child: TextFormField(
+showTextFieldDialog({context, title, label, onPress}) {
+  CollectionReference test = FirebaseFirestore.instance.collection("test");
 
-                    cursorColor: Colors.grey,
-                    decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-
-                      labelText: label,
-                      labelStyle: TextStyle(
-                        color: Colors.grey,
-                        decorationColor: Color.fromRGBO(32, 227, 178, 1),
-                      ),
-
-                    ),
+  final _textFieldController = TextEditingController();
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          scrollable: true,
+          title: Center(child: Text(title)),
+          content: Container(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              child: TextFormField(
+                controller: _textFieldController,
+                cursorColor: Colors.grey,
+                decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  labelText: label,
+                  labelStyle: TextStyle(
+                    color: Colors.grey,
+                    decorationColor: Color.fromRGBO(32, 227, 178, 1),
                   ),
                 ),
               ),
-              actions: [
-                TextButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      onPrimary: Colors.white,
-                      padding: EdgeInsets.all(0),
-                      primary: Color.fromRGBO(32, 227, 178, 1),
-                    ),
-                    child: Text("Add"),
-                    onPressed: onPress)
-              ],
-            );
-          });
+            ),
+          ),
+          actions: [
+            TextButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  onPrimary: Colors.white,
+                  padding: EdgeInsets.all(0),
+                  primary: Color.fromRGBO(32, 227, 178, 1),
+                ),
+                child: Text("Add"),
+                onPressed: () {
+                  test.add({'name': _textFieldController.text});
+                  Navigator.pop(context, false);
+                })
+          ],
+        );
+      });
 }
 
-showEditTextFieldDialog({context, title, initialText, label, onPress}){
+showEditTextFieldDialog({context, title, initialText, label, onPress}) {
+  // ignore: unused_local_variable
+  CollectionReference test = FirebaseFirestore.instance.collection("test");
+
   final _textFieldController = TextEditingController();
   _textFieldController.text = initialText;
   showDialog(
@@ -89,13 +97,14 @@ showEditTextFieldDialog({context, title, initialText, label, onPress}){
                   padding: EdgeInsets.all(0),
                   primary: Color.fromRGBO(32, 227, 178, 1),
                 ),
-                child: Text("Add"),
+                child: Text("Edit"),
                 onPressed: onPress)
           ],
         );
       });
 }
-showConfirmationdDialog({context, title, label, onPress}){
+
+showConfirmationdDialog({context, title, label, onPress}) {
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -131,7 +140,9 @@ showConfirmationdDialog({context, title, label, onPress}){
                   primary: Colors.red,
                 ),
                 child: Text("Cancel"),
-                onPressed: (){Navigator.pop(context);}),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
           ],
         );
       });
