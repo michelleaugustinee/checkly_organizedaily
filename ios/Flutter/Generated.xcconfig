@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=G:\Software\flutter
-FLUTTER_APPLICATION_PATH=G:\UNTAR_SEM_4\Software_Development\ProjectUAS\checkly
+FLUTTER_ROOT=C:\Kevin Adhi\Kuliah\Semester 4\Mobile Programming\Flutter\flutter
+FLUTTER_APPLICATION_PATH=C:\Kevin Adhi\Kuliah\Semester 4\Software Development\UAS\UAS\checkly_organizedaily
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib\main.dart
 FLUTTER_BUILD_DIR=build
