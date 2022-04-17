@@ -1,4 +1,6 @@
 import 'package:checkly/components/dialogs.dart';
+import 'package:checkly/components/reorderable_list_view_const.dart';
+import 'package:checkly/components/white_text_card.dart';
 import 'package:checkly/model/todo.dart';
 import 'package:checkly/pages/list.dart';
 import 'package:checkly/pages/settings.dart';
@@ -19,6 +21,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final DateTime now = DateTime.now();
+
+
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
@@ -44,16 +48,37 @@ class _HomeState extends State<Home> {
                         children: [
                           Text("TO DO", style: TextStyle(fontWeight: FontWeight.bold),),
                           SizedBox(height: 5,),
+                          // Expanded(
+                          //   child: ListView.builder(
+                          //       itemCount: todos.length,
+                          //       itemBuilder: (context, index){
+                          //         return WhiteTextButton(
+                          //             text: todos[index].title,
+                          //             onPress: (){
+                          //               Navigator.pushNamed(context, '/list');
+                          //             });
+                          //       }),
+                          // ),
                           Expanded(
-                            child: ListView.builder(
+                            child: ReorderableListView.builder(
                                 itemCount: todos.length,
                                 itemBuilder: (context, index){
-                                  return WhiteTextButton(
+                                  return WhiteTextCard(
+                                    key: ValueKey("$index"),
                                       text: todos[index].title,
                                       onPress: (){
                                         Navigator.pushNamed(context, '/list');
                                       });
-                                }),
+                                },
+                              onReorder: (oldIndex,  newIndex){
+                                setState(() {
+                                  ReorderableListViewCheckly().onReorder(oldIndex, newIndex, todos);
+                                });
+                              },
+                              proxyDecorator: (Widget child, int index, Animation<double> animation) {
+                                return ReorderableListViewCheckly().proxyDecorator(child);
+                              },
+                            ),
                           ),
                         ],
                       )

@@ -5,12 +5,11 @@ class SharedPreferenceUtil{
 
   saveName(username) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("username", username.toString());
+    await prefs.setString("username", username.toString());
   }
-
   getName() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String name = prefs.getString("username").toString();
+    String name = await prefs.getString("username").toString();
     return name;
   }
 

@@ -8,7 +8,7 @@ import 'package:checkly/pages/home.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/home',
+    initialRoute: '/guest',
     routes: {
       '/login': (context) => Login(),
       '/home': (context) => Home(),
