@@ -56,12 +56,14 @@ class _ListEditState extends State<ListEdit> {
                                   initialText: task['name'],
                                   onPress: () {
                                     setState(() {
-                                      Navigator.pop(context);
+                                      // final TextEditingController _textEditingController = TextEditingController();
+                                      // final String? edit = _textEditingController.text;
+                                      // test.doc(task.id).update({"name": edit});
                                     });
                                   });
                             },
                             trashOnPress: () {
-                              test.doc('pwFQ88qKUlia18ma33N5').delete();
+                              test.doc(task.id).delete();
                             },
                           );
                         }).toList(),

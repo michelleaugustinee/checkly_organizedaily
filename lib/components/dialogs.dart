@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 showTextFieldDialog({context, title, label, onPress}) {
   CollectionReference test = FirebaseFirestore.instance.collection("test");
-
+  
   final _textFieldController = TextEditingController();
   showDialog(
       context: context,
@@ -98,7 +98,9 @@ showEditTextFieldDialog({context, title, initialText, label, onPress}) {
                   primary: Color.fromRGBO(32, 227, 178, 1),
                 ),
                 child: Text("Edit"),
-                onPressed: onPress)
+                onPressed: () {
+                  Navigator.pop(context, false);
+                })
           ],
         );
       });
