@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-showTextFieldDialog({context, title, label, onPress}) {
-  CollectionReference test = FirebaseFirestore.instance.collection("test");
+showTextFieldDialog({context, title, label, onPress, textFieldController}) {
+  // CollectionReference test = FirebaseFirestore.instance.collection("test");
   
-  final _textFieldController = TextEditingController();
+  // final _textFieldController = TextEditingController();
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -18,7 +18,7 @@ showTextFieldDialog({context, title, label, onPress}) {
             padding: const EdgeInsets.all(8.0),
             child: Form(
               child: TextFormField(
-                controller: _textFieldController,
+                controller: textFieldController,
                 cursorColor: Colors.grey,
                 decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(
@@ -44,21 +44,22 @@ showTextFieldDialog({context, title, label, onPress}) {
                   primary: Color.fromRGBO(32, 227, 178, 1),
                 ),
                 child: Text("Add"),
-                onPressed: () {
-                  test.add({'name': _textFieldController.text});
-                  Navigator.pop(context, false);
-                })
+                onPressed: onPress)
+                //     () {
+                //   test.add({'name': _textFieldController.text});
+                //   Navigator.pop(context, false);
+                // })
           ],
         );
       });
 }
 
-showEditTextFieldDialog({context, title, initialText, label, onPress}) {
+showEditTextFieldDialog({context, title, initialText, label, onPress,textFieldController}) {
   // ignore: unused_local_variable
   CollectionReference test = FirebaseFirestore.instance.collection("test");
 
-  final _textFieldController = TextEditingController();
-  _textFieldController.text = initialText;
+  // final _textFieldController = TextEditingController();
+  textFieldController.text = initialText;
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -72,7 +73,7 @@ showEditTextFieldDialog({context, title, initialText, label, onPress}) {
             padding: const EdgeInsets.all(8.0),
             child: Form(
               child: TextFormField(
-                controller: _textFieldController,
+                controller: textFieldController,
                 cursorColor: Colors.grey,
                 decoration: InputDecoration(
                   labelText: label,
@@ -98,9 +99,7 @@ showEditTextFieldDialog({context, title, initialText, label, onPress}) {
                   primary: Color.fromRGBO(32, 227, 178, 1),
                 ),
                 child: Text("Edit"),
-                onPressed: () {
-                  Navigator.pop(context, false);
-                })
+                onPressed: onPress)
           ],
         );
       });

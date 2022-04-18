@@ -49,16 +49,18 @@ class _ListEditState extends State<ListEdit> {
                           return TrashFillButton(
                             text: task['name'],
                             textOnPress: () {
+                              final _textFieldController = TextEditingController();
+
                               showEditTextFieldDialog(
+                                  textFieldController:_textFieldController,
                                   context: context,
                                   title: "Edit Task",
                                   label: "Task Name",
                                   initialText: task['name'],
-                                  onPress: () {
+                                  onPress: (){
+                                    test.doc(task.id).update({'name': _textFieldController.text});
                                     setState(() {
-                                      // final TextEditingController _textEditingController = TextEditingController();
-                                      // final String? edit = _textEditingController.text;
-                                      // test.doc(task.id).update({"name": edit});
+                                      Navigator.pop(context);
                                     });
                                   });
                             },
@@ -101,11 +103,15 @@ class _ListEditState extends State<ListEdit> {
                     CircularIconButton(
                         icon: Icons.add,
                         onPress: () {
+                          final _textFieldController = TextEditingController();
                           showTextFieldDialog(
+                              textFieldController: _textFieldController,
                               context: context,
                               title: "Add Task",
                               label: "Task Name",
                               onPress: () {
+                                CollectionReference test = FirebaseFirestore.instance.collection("test");
+                                test.add({'name': _textFieldController.text});
                                 setState(() {
                                   Navigator.pop(context);
                                 });
