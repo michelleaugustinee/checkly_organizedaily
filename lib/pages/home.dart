@@ -5,23 +5,34 @@ import 'package:checkly/model/todo.dart';
 import 'package:checkly/pages/list.dart';
 import 'package:checkly/pages/settings.dart';
 import 'package:checkly/utils/shared_preference.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/white_text_button.dart';
 import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/circular_icon_button.dart';
+
 import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({Key? key,}) :  super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   final DateTime now = DateTime.now();
-
+  bool hasUser = false;
+  User? user;
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      hasUser = true;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +44,16 @@ class _HomeState extends State<Home> {
         body: SafeArea(
             child: Column(
               children: [
-                FutureBuilder(
-                  future: SharedPreferenceUtil().getName(),
+                hasUser? FutureBuilder(
+                    future: SharedPreferenceUtil().getName(),
                     builder: (context, snapshot) {
-                  return OpaqueContainerText(text: "Hello ${snapshot.data.toString()} :)", fontSize: 40,);
-                }),
+                      return OpaqueContainerText(text: "Hello ${user!.displayName} :)", fontSize: 40,);
+                    })
+                : FutureBuilder(
+                    future: SharedPreferenceUtil().getName(),
+                    builder: (context, snapshot) {
+                      return OpaqueContainerText(text: "Hello ${snapshot.data.toString()} :)", fontSize: 40,);
+                    }),
 
                 OpaqueContainerText(text: DateFormat('EEEE, d MMMM y').format(now), fontSize: 20,),
                 Expanded(

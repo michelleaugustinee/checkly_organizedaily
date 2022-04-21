@@ -12,6 +12,10 @@ class SharedPreferenceUtil{
     String name = await prefs.getString("username").toString();
     return name;
   }
+  isLoggedIn(isLoggedIn) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isLoggedIn", isLoggedIn);
+  }
 
   // retrieve() async{
   //   _getInstance();

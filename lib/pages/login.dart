@@ -2,6 +2,7 @@ import 'package:checkly/components/google_button.dart';
 import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_center_button.dart';
 import 'package:checkly/pages/guest_name.dart';
+import 'package:checkly/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
 import '../auth/authentication.dart';
 
@@ -43,7 +44,8 @@ class Login extends StatelessWidget {
               ),
               OpaqueCenterButton(
                 text: "Skip",
-                onPress: () {
+                onPress: () async {
+                  await SharedPreferenceUtil().isLoggedIn(false);
                   Navigator.popAndPushNamed(context, '/guest');
                 },
               )
