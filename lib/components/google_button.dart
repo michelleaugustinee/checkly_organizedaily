@@ -1,3 +1,4 @@
+import 'package:checkly/utils/shared_preference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -5,6 +6,10 @@ import '../auth/authentication.dart';
 import '../pages/home.dart';
 
 class GoogleSignInButton extends StatefulWidget {
+  String routeName;
+
+  GoogleSignInButton({Key? key, this.routeName = "/home"}) : super(key: key);
+
   @override
   _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
 }
@@ -42,23 +47,24 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 });
 
                 if (user != null) {
-                  Navigator.pushReplacementNamed(context, '/home');
+                  await SharedPreferenceUtil().saveName(user.displayName);
+                  Navigator.pushReplacementNamed(context, widget.routeName);
                 }
               },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Image(
                       image: AssetImage("assets/images/Google.png"),
                       height: 35.0,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 0,right: 30),
                       child: Text(
-                        'Sign in with Google',
+                        'Google',
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.black54,

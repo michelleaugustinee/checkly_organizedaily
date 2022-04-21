@@ -24,6 +24,14 @@ class Login extends StatelessWidget {
               SizedBox(
                 height: 50,
               ),
+              Text(
+                "Sign In with",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.white, fontSize:20),
+              ),
+              SizedBox(
+                height: 15,
+              ),
               FutureBuilder(
                 future: Authentication.initializeFirebase(context: context),
                 builder: (context, snapshot) {
@@ -45,7 +53,6 @@ class Login extends StatelessWidget {
               OpaqueCenterButton(
                 text: "Skip",
                 onPress: () async {
-                  await SharedPreferenceUtil().isLoggedIn(false);
                   Navigator.popAndPushNamed(context, '/guest');
                 },
               )

@@ -16,9 +16,10 @@ class Authentication {
 
     User? user = FirebaseAuth.instance.currentUser;
 
+
     if (user != null) {
-      await SharedPreferenceUtil().isLoggedIn(true);
-      Navigator.pushReplacementNamed(context, '/home');
+
+      // Navigator.pushReplacementNamed(context, '/home');
     }
 
     return firebaseApp;
