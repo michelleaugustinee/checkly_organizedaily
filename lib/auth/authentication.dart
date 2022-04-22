@@ -1,3 +1,4 @@
+import 'package:checkly/utils/shared_preference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +16,10 @@ class Authentication {
 
     User? user = FirebaseAuth.instance.currentUser;
 
+
     if (user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => Home(
-              // user: user,
-              ),
-        ),
-      );
+
+      // Navigator.pushReplacementNamed(context, '/home');
     }
 
     return firebaseApp;

@@ -10,6 +10,7 @@ import 'package:checkly/components/white_check_button.dart';
 import 'package:checkly/pages/home.dart';
 import 'package:checkly/pages/login.dart';
 import 'package:checkly/utils/shared_preference.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../auth/authentication.dart';
@@ -23,27 +24,38 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool _isSigningOut = false;
-  Route _routeToSignInScreen() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => Login(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(-1.0, 0.0);
-        var end = Offset.zero;
-        var curve = Curves.ease;
+  // Route _routeToSignInScreen() {
+  //   return PageRouteBuilder(
+  //     pageBuilder: (context, animation, secondaryAnimation) => Login(),
+  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+  //       var begin = Offset(-1.0, 0.0);
+  //       var end = Offset.zero;
+  //       var curve = Curves.ease;
+  //
+  //       var tween =
+  //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+  //
+  //       return SlideTransition(
+  //         position: animation.drive(tween),
+  //         child: child,
+  //       );
+  //     },
+  //   );
+  // }
 
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-    );
-  }
-
-  bool guest = false;
   String username = "";
+  String email = "";
+  bool isLoggedIn = false;
+  User? user;
+  @override
+  void initState() {
+    user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      isLoggedIn = true;
+      email = user!.email!;
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return GradientBackground(
@@ -60,9 +72,9 @@ class _SettingsState extends State<Settings> {
             children: [
               Column(
                 children: [
-                  guest
+                  !isLoggedIn
                       ? SizedBox.shrink()
-                      : OpaqueContainerText(text: "john@gmail.com"),
+                      : OpaqueContainerText(text: "${email}"),
                   OpaqueContainerText(
                     text: "Edit Profile",
                     fontSize: 40,
@@ -124,32 +136,32 @@ class _SettingsState extends State<Settings> {
               ),
               Column(
                 children: [
-                  guest
-                      ? Text(
-                          "Log In with",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        )
+                  !isLoggedIn ?
+                  Text("Log In with",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                  )
                       : SizedBox.shrink(),
                   SizedBox(
                     height: 10,
                   ),
-                  guest
-                      ? GoogleSignInButton()
+                  !isLoggedIn
+                      ? GoogleSignInButton(routeName: "/settings",)
                       : OpaqueCenterButton(
-                          text: "Log Out",
-                          onPress: () async {
-                            setState(() {
-                              _isSigningOut = true;
-                            });
-                            await Authentication.signOut(context: context);
-                            setState(() {
-                              _isSigningOut = false;
-                            });
-                            Navigator.of(context)
-                                .pushReplacement(_routeToSignInScreen());
-                          },
-                        ),
+                    text: "Log Out",
+                    onPress: () async {
+                      setState(() {
+                        _isSigningOut = true;
+                      });
+                      await Authentication.signOut(context: context);
+                      setState(() {
+                        _isSigningOut = false;
+                      });
+                      // Navigator.of(context)
+                      //     .pushReplacement(_routeToSignInScreen());
+                      setState(() {isLoggedIn = false;});
+                    },
+                  ),
                   SizedBox(height: 20),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -169,6 +181,7 @@ class _SettingsState extends State<Settings> {
                   )
                 ],
               ),
+
             ],
           ),
         ),

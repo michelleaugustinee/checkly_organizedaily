@@ -9,9 +9,10 @@ class SharedPreferenceUtil{
   }
   getName() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String name = await prefs.getString("username").toString();
+    String? name = await prefs.getString("username");
     return name;
   }
+
 
   // retrieve() async{
   //   _getInstance();
