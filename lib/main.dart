@@ -11,7 +11,7 @@ Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MaterialApp(
-    initialRoute: '/list',
+    initialRoute: '/login',
     routes: {
       '/login': (context) => Login(),
       '/home': (context) => Home(),
