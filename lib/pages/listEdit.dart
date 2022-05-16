@@ -17,9 +17,12 @@ class ListEdit extends StatefulWidget {
 }
 
 class _ListEditState extends State<ListEdit> {
+  int taskCount = 0;
   @override
   Widget build(BuildContext context) {
-    CollectionReference test = FirebaseFirestore.instance.collection("test");
+    Query tasks = FirebaseFirestore.instance.collection("Tasks").orderBy("OrderIndex");
+    CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
+
 
     return GradientBackground(
       child: Scaffold(
@@ -36,7 +39,7 @@ class _ListEditState extends State<ListEdit> {
               Expanded(
                 child: OpaqueContainerChild(
                   child: StreamBuilder(
-                    stream: test.snapshots(),
+                    stream: tasks.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
@@ -45,9 +48,10 @@ class _ListEditState extends State<ListEdit> {
                       }
                       return ListView(
                         children: snapshot.data!.docs.map((task) {
+                          taskCount = snapshot.data!.docs.length;
                           // return WhiteCheckButton(text: task['name']);
                           return TrashFillButton(
-                            text: task['name'],
+                            text: task['TaskName'],
                             textOnPress: () {
                               final _textFieldController = TextEditingController();
 
@@ -58,14 +62,14 @@ class _ListEditState extends State<ListEdit> {
                                   label: "Task Name",
                                   initialText: task['name'],
                                   onPress: (){
-                                    test.doc(task.id).update({'name': _textFieldController.text});
+                                    taskCollection.doc(task.id).update({'TaskName': _textFieldController.text});
                                     setState(() {
                                       Navigator.pop(context);
                                     });
                                   });
                             },
                             trashOnPress: () {
-                              test.doc(task.id).delete();
+                              taskCollection.doc(task.id).delete();
                             },
                           );
                         }).toList(),
@@ -110,8 +114,13 @@ class _ListEditState extends State<ListEdit> {
                               title: "Add Task",
                               label: "Task Name",
                               onPress: () {
-                                CollectionReference test = FirebaseFirestore.instance.collection("test");
-                                test.add({'name': _textFieldController.text});
+                                CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
+                                taskCollection.add({
+                                  'TaskName': _textFieldController.text,
+                                  'OrderIndex': taskCount,
+                                  'ListID': "test",
+                                  'Color': "red",
+                                });
                                 setState(() {
                                   Navigator.pop(context);
                                 });

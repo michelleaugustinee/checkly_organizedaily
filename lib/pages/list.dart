@@ -2,6 +2,7 @@ import 'package:checkly/components/circular_icon_button.dart';
 import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/opaque_container_text.dart';
+import 'package:checkly/components/reorderable_list_view_const.dart';
 import 'package:checkly/components/white_check_button.dart';
 import 'package:checkly/model/todo.dart';
 import 'package:checkly/pages/listEdit.dart';
@@ -17,10 +18,10 @@ class List extends StatefulWidget {
 
 class _ListState extends State<List> {
   final textController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    CollectionReference test = FirebaseFirestore.instance.collection("test");
+    Query tasks = FirebaseFirestore.instance.collection("Tasks").orderBy("OrderIndex");
+    CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
 
     return GradientBackground(
       child: Scaffold(
@@ -42,17 +43,26 @@ class _ListState extends State<List> {
                   //       return WhiteCheckButton(text: todos[index].title);
                   //     }),
                   child: StreamBuilder(
-                    stream: test.snapshots(),
+                    stream: tasks.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
                           child: Text("Loading"),
                         );
                       }
-                      return ListView(
+                      return ReorderableListView(
                         children: snapshot.data!.docs.map((task) {
-                          return WhiteCheckButton(text: task['name']);
+
+                          return WhiteCheckButton(
+                            key:  ValueKey("${task['OrderIndex']}"),
+                              text: task['TaskName']);
                         }).toList(),
+                        onReorder: (oldIndex,  newIndex){
+                          ReorderableListViewCheckly().onReorderFireStore(oldIndex, newIndex, snapshot, taskCollection);
+                        },
+                        proxyDecorator: (Widget child, int index, Animation<double> animation) {
+                          return ReorderableListViewCheckly().proxyDecorator(child);
+                        },
                       );
                     },
                   ),
