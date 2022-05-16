@@ -27,7 +27,9 @@ class Login extends StatelessWidget {
               Text(
                 "Sign In with",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.white, fontSize:20),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 20),
               ),
               SizedBox(
                 height: 15,
@@ -48,7 +50,7 @@ class Login extends StatelessWidget {
                 },
               ),
               SizedBox(
-                height: 250,
+                height: 200,
               ),
               OpaqueCenterButton(
                 text: "Skip",

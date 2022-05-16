@@ -20,8 +20,10 @@ class _ListState extends State<List> {
   final textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    Query tasks = FirebaseFirestore.instance.collection("Tasks").orderBy("OrderIndex");
-    CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
+    Query tasks =
+        FirebaseFirestore.instance.collection("Tasks").orderBy("OrderIndex");
+    CollectionReference taskCollection =
+        FirebaseFirestore.instance.collection("Tasks");
 
     return GradientBackground(
       child: Scaffold(
@@ -52,16 +54,18 @@ class _ListState extends State<List> {
                       }
                       return ReorderableListView(
                         children: snapshot.data!.docs.map((task) {
-
                           return WhiteCheckButton(
-                            key:  ValueKey("${task['OrderIndex']}"),
+                              key: ValueKey("${task.id}"),
                               text: task['TaskName']);
                         }).toList(),
-                        onReorder: (oldIndex,  newIndex){
-                          ReorderableListViewCheckly().onReorderFireStore(oldIndex, newIndex, snapshot, taskCollection);
+                        onReorder: (oldIndex, newIndex) {
+                          ReorderableListViewCheckly().onReorderFireStore(
+                              oldIndex, newIndex, snapshot, taskCollection);
                         },
-                        proxyDecorator: (Widget child, int index, Animation<double> animation) {
-                          return ReorderableListViewCheckly().proxyDecorator(child);
+                        proxyDecorator: (Widget child, int index,
+                            Animation<double> animation) {
+                          return ReorderableListViewCheckly()
+                              .proxyDecorator(child);
                         },
                       );
                     },
