@@ -5,6 +5,7 @@ import 'package:checkly/model/todo.dart';
 import 'package:checkly/pages/list.dart';
 import 'package:checkly/pages/settings.dart';
 import 'package:checkly/utils/shared_preference.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:checkly/components/opaque_container_text.dart';
@@ -22,9 +23,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
   final DateTime now = DateTime.now();
   bool hasUser = false;
   User? user;
+  int listCount = 0;
   @override
   void initState() {
     user = FirebaseAuth.instance.currentUser;
@@ -36,6 +39,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    Query lists = FirebaseFirestore.instance.collection("Lists").orderBy("OrderIndex");
+    CollectionReference listsCollection = FirebaseFirestore.instance.collection("Lists");
     return GradientBackground(
       child: Scaffold(
         resizeToAvoidBottomInset : false,
@@ -64,35 +69,33 @@ class _HomeState extends State<Home> {
                         children: [
                           Text("TO DO", style: TextStyle(fontWeight: FontWeight.bold),),
                           SizedBox(height: 5,),
-                          // Expanded(
-                          //   child: ListView.builder(
-                          //       itemCount: todos.length,
-                          //       itemBuilder: (context, index){
-                          //         return WhiteTextButton(
-                          //             text: todos[index].title,
-                          //             onPress: (){
-                          //               Navigator.pushNamed(context, '/list');
-                          //             });
-                          //       }),
-                          // ),
                           Expanded(
-                            child: ReorderableListView.builder(
-                                itemCount: todos.length,
-                                itemBuilder: (context, index){
-                                  return WhiteTextCard(
-                                    key: ValueKey("$index"),
-                                      text: todos[index].title,
-                                      onPress: (){
-                                        Navigator.pushNamed(context, '/list');
-                                      });
-                                },
-                              onReorder: (oldIndex,  newIndex){
-                                setState(() {
-                                  ReorderableListViewCheckly().onReorder(oldIndex, newIndex, todos);
-                                });
-                              },
-                              proxyDecorator: (Widget child, int index, Animation<double> animation) {
-                                return ReorderableListViewCheckly().proxyDecorator(child);
+                            child: StreamBuilder(
+                              stream: lists.snapshots(),
+                              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: Text("Loading"),
+                                  );
+                                }
+                                return ReorderableListView(
+                                    children: snapshot.data!.docs.map((list){
+                                      listCount = snapshot.data!.docs.length;
+                                      return WhiteTextCard(
+                                          key: ValueKey("${list['OrderIndex']}"),
+                                          text: list['ListName'],
+                                          onPress: (){
+                                            Navigator.pushNamed(context, '/list');
+                                          });
+
+                                    }).toList(),
+                                    onReorder: (oldIndex,  newIndex){
+                                      ReorderableListViewCheckly().onReorderFireStore(oldIndex, newIndex, snapshot, listsCollection);
+                                    },
+                                    proxyDecorator: (Widget child, int index, Animation<double> animation) {
+                                      return ReorderableListViewCheckly().proxyDecorator(child);
+                                    },
+                                );
                               },
                             ),
                           ),
@@ -109,13 +112,25 @@ class _HomeState extends State<Home> {
                         onPress: (){
                           Navigator.pushNamed(context, '/settings');
                         }),
-                    CircularIconButton(icon: Icons.add,
+                    CircularIconButton(
+                        icon: Icons.add,
                         onPress: (){
+                          final _textFieldController = TextEditingController();
                           showTextFieldDialog(
+                              textFieldController: _textFieldController,
                             context:context,
                             title: "Create New List",
                             label: "List Name",
                             onPress: (){
+                                if(_textFieldController.text != ""){
+                                  CollectionReference lists = FirebaseFirestore.instance.collection("Lists");
+                                  lists.add({
+                                    'ListName': _textFieldController.text,
+                                    'OrderIndex': listCount ,
+                                    'UserID' : 'test'
+                                  });
+                                }
+
                               setState(() {
                                 Navigator.pop(context);
                               });

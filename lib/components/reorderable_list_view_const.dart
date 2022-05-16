@@ -9,6 +9,23 @@ class ReorderableListViewCheckly{
     final dynamic item = items.removeAt(oldIndex);
     items.insert(newIndex, item);
   }
+  onReorderFireStore(oldIndex, newIndex, snapshot, collectionRef){
+    if(newIndex > oldIndex){
+      for(int i = oldIndex + 1; i < newIndex; i++){
+        String id = snapshot.data!.docs[i].id;
+        collectionRef.doc(id).update({'OrderIndex': i-1});
+      }
+      String id = snapshot.data!.docs[oldIndex].id;
+      collectionRef.doc(id).update({'OrderIndex': newIndex-1});
+    }else{
+      for(int i = oldIndex - 1; i >= newIndex; i--){
+        String id = snapshot.data!.docs[i].id;
+        collectionRef.doc(id).update({'OrderIndex': i+1});
+      }
+      String id = snapshot.data!.docs[oldIndex].id;
+      collectionRef.doc(id).update({'OrderIndex': newIndex});
+    }
+  }
 
   proxyDecorator(child) {
     return Material(
