@@ -2,8 +2,9 @@ import 'package:checkly/components/dialogs.dart';
 import 'package:checkly/components/reorderable_list_view_const.dart';
 import 'package:checkly/components/white_text_card.dart';
 import 'package:checkly/model/todo.dart';
-import 'package:checkly/pages/list.dart';
+import 'package:checkly/pages/tasks.dart';
 import 'package:checkly/pages/settings.dart';
+import 'package:checkly/pages/topics_edit.dart';
 import 'package:checkly/utils/shared_preference.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,7 +29,7 @@ class _HomeState extends State<Home> {
   final DateTime now = DateTime.now();
   bool hasUser = false;
   User? user;
-  int listCount = 0;
+  int topicsCount = 0;
   @override
   void initState() {
     user = FirebaseAuth.instance.currentUser;
@@ -40,10 +41,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    Query lists =
-        FirebaseFirestore.instance.collection("Lists").orderBy("OrderIndex");
-    CollectionReference listsCollection =
-        FirebaseFirestore.instance.collection("Lists");
+    Query topics =
+        FirebaseFirestore.instance.collection("Topics").orderBy("OrderIndex");
+    CollectionReference topicsCollection =
+        FirebaseFirestore.instance.collection("Topics");
     return GradientBackground(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -91,7 +92,7 @@ class _HomeState extends State<Home> {
                   ),
                   Expanded(
                     child: StreamBuilder(
-                      stream: lists.snapshots(),
+                      stream: topics.snapshots(),
                       builder:
                           (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (!snapshot.hasData) {
@@ -100,18 +101,21 @@ class _HomeState extends State<Home> {
                           );
                         }
                         return ReorderableListView(
-                          children: snapshot.data!.docs.map((list) {
-                            listCount = snapshot.data!.docs.length;
+                          children: snapshot.data!.docs.map((topic) {
+                            topicsCount = snapshot.data!.docs.length;
                             return WhiteTextCard(
-                                key: ValueKey("${list.id}"),
-                                text: list['ListName'],
+                                key: ValueKey("${topic.id}"),
+                                text: topic['TopicName'],
                                 onPress: () {
-                                  Navigator.pushNamed(context, '/list');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => Tasks(topicID: topic.id, topicName: topic["TopicName"],)),
+                                  );
                                 });
                           }).toList(),
                           onReorder: (oldIndex, newIndex) {
                             ReorderableListViewCheckly().onReorderFireStore(
-                                oldIndex, newIndex, snapshot, listsCollection);
+                                oldIndex, newIndex, snapshot, topicsCollection);
                           },
                           proxyDecorator: (Widget child, int index,
                               Animation<double> animation) {
@@ -136,30 +140,14 @@ class _HomeState extends State<Home> {
                         Navigator.pushNamed(context, '/settings');
                       }),
                   CircularIconButton(
-                      icon: Icons.add,
+                      icon: Icons.edit,
                       onPress: () {
-                        final _textFieldController = TextEditingController();
-                        showTextFieldDialog(
-                            textFieldController: _textFieldController,
-                            context: context,
-                            title: "Create New List",
-                            label: "List Name",
-                            onPress: () {
-                              if (_textFieldController.text != "") {
-                                CollectionReference lists = FirebaseFirestore
-                                    .instance
-                                    .collection("Lists");
-                                lists.add({
-                                  'ListName': _textFieldController.text,
-                                  'OrderIndex': listCount,
-                                  'UserID': 'test'
-                                });
-                              }
-
-                              setState(() {
-                                Navigator.pop(context);
-                              });
-                            });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) => TopicsEdit(
+                          ))
+                        );
                       }),
                 ],
               ),

@@ -4,16 +4,15 @@ class WhiteCheckButton extends StatefulWidget {
 
   final double fontSize;
   final String text;
-
-
-  const WhiteCheckButton({Key? key, this.fontSize = 20, required this.text}) : super(key: key);
+  final onPress;
+  final bool status;
+  const WhiteCheckButton({Key? key, this.fontSize = 20, required this.text, required this.onPress, required this.status}) : super(key: key);
 
   @override
   State<WhiteCheckButton> createState() => _WhiteCheckButtonState();
 }
 
 class _WhiteCheckButtonState extends State<WhiteCheckButton> {
-  bool checked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +28,7 @@ class _WhiteCheckButtonState extends State<WhiteCheckButton> {
           // primary: Colors.white,
 
         ),
-        onPressed: (){
-          if(checked){
-            checked = false;
-          }else{
-            checked = true;
-          }
-          setState(() {});
-        },
+        onPressed: widget.onPress,
         child: Row(
           children: [
             Expanded(
@@ -51,15 +43,15 @@ class _WhiteCheckButtonState extends State<WhiteCheckButton> {
                     child: Text(
                       widget.text,
                       style: TextStyle(
-                        color: checked? Colors.grey : Colors.black,
+                        color: widget.status? Colors.grey : Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: widget.fontSize,
-                        decoration: checked? TextDecoration.lineThrough :  TextDecoration.none
+                        decoration: widget.status? TextDecoration.lineThrough :  TextDecoration.none
                       ),
                     ),
                   )),
             ),
-            checked?
+            widget.status?
             Icon(Icons.check_box_outlined,size: 50,color: Colors.white,) :
             Icon(Icons.check_box_outline_blank,size: 50,color: Colors.white,)
           ],

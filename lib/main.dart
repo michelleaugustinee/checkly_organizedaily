@@ -1,6 +1,6 @@
 import 'package:checkly/pages/guest_name.dart';
-import 'package:checkly/pages/list.dart';
-import 'package:checkly/pages/listEdit.dart';
+import 'package:checkly/pages/tasks.dart';
+import 'package:checkly/pages/tasks_edit.dart';
 import 'package:checkly/pages/login.dart';
 import 'package:checkly/pages/settings.dart';
 import 'package:checkly/utils/shared_preference.dart';
@@ -23,8 +23,8 @@ Future<void> main() async{
     routes: {
       '/login': (context) => Login(),
       '/home': (context) => Home(),
-      '/list': (context) => List(),
-      '/listEdit': (context) => ListEdit(),
+      // '/tasks': (context) => Tasks(),
+      // '/tasksEdit': (context) => TasksEdit(),
       '/settings': (context) => Settings(),
       '/guest': (context) => Guest(),
     },

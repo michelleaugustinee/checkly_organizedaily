@@ -1,5 +1,6 @@
 import 'package:checkly/components/circular_icon_button.dart';
 import 'package:checkly/components/dialogs.dart';
+import 'package:checkly/components/edit_mode_function.dart';
 import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/opaque_container_text.dart';
@@ -11,17 +12,17 @@ import 'package:flutter/rendering.dart';
 
 import '../components/white_check_button.dart';
 
-class ListEdit extends StatefulWidget {
+class TopicsEdit extends StatefulWidget {
   @override
-  _ListEditState createState() => _ListEditState();
+  _TopicsEditState createState() => _TopicsEditState();
 }
 
-class _ListEditState extends State<ListEdit> {
-  int taskCount = 0;
+class _TopicsEditState extends State<TopicsEdit> {
+  int topicsCount = 0;
   @override
   Widget build(BuildContext context) {
-    Query tasks = FirebaseFirestore.instance.collection("Tasks").orderBy("OrderIndex");
-    CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
+    Query topics = FirebaseFirestore.instance.collection("Topics").orderBy("OrderIndex");
+    CollectionReference topicsCollection = FirebaseFirestore.instance.collection("Topics");
 
 
     return GradientBackground(
@@ -35,11 +36,11 @@ class _ListEditState extends State<ListEdit> {
         body: SafeArea(
           child: Column(
             children: [
-              OpaqueContainerText(text: "Shopping List"),
+              OpaqueContainerText(text: "Edit Topics"),
               Expanded(
                 child: OpaqueContainerChild(
                   child: StreamBuilder(
-                    stream: tasks.snapshots(),
+                    stream: topics.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
@@ -47,11 +48,11 @@ class _ListEditState extends State<ListEdit> {
                         );
                       }
                       return ListView(
-                        children: snapshot.data!.docs.map((task) {
-                          taskCount = snapshot.data!.docs.length;
+                        children: snapshot.data!.docs.map((topic) {
+                          topicsCount = snapshot.data!.docs.length;
                           // return WhiteCheckButton(text: task['name']);
                           return TrashFillButton(
-                            text: task['TaskName'],
+                            text: topic['TopicName'],
                             textOnPress: () {
                               final _textFieldController = TextEditingController();
 
@@ -59,17 +60,30 @@ class _ListEditState extends State<ListEdit> {
                                   textFieldController:_textFieldController,
                                   context: context,
                                   title: "Edit Task",
-                                  label: "Task Name",
-                                  initialText: task['name'],
+                                  label: "Topic Name",
+                                  initialText: topic['TopicName'],
                                   onPress: (){
-                                    taskCollection.doc(task.id).update({'TaskName': _textFieldController.text});
+                                    topicsCollection.doc(topic.id).update({'TopicName': _textFieldController.text});
                                     setState(() {
                                       Navigator.pop(context);
                                     });
                                   });
                             },
                             trashOnPress: () {
-                              taskCollection.doc(task.id).delete();
+                              showConfirmationdDialog(
+                                  context: context,
+                                  title: "Confirm Delete",
+                                  label: "Are you sure want to delete this task?",
+                                  onPress: () {
+                                    int index = topic["OrderIndex"];
+                                    topicsCollection.doc(topic.id).delete();
+                                    EditModeFunction()
+                                        .deleteReoderFirestore(
+                                        index, topicsCount, snapshot,topicsCollection);
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  });
                             },
                           );
                         }).toList(),
@@ -111,16 +125,20 @@ class _ListEditState extends State<ListEdit> {
                           showTextFieldDialog(
                               textFieldController: _textFieldController,
                               context: context,
-                              title: "Add Task",
-                              label: "Task Name",
+                              title: "Create New Topic",
+                              label: "Topic Name",
                               onPress: () {
-                                CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
-                                taskCollection.add({
-                                  'TaskName': _textFieldController.text,
-                                  'OrderIndex': taskCount,
-                                  'ListID': "test",
-                                  'Color': "red",
-                                });
+                                if (_textFieldController.text != "") {
+                                  CollectionReference topics = FirebaseFirestore
+                                      .instance
+                                      .collection("Topics");
+                                  topics.add({
+                                    'TopicName': _textFieldController.text,
+                                    'OrderIndex': topicsCount,
+                                    'UserID': 'test'
+                                  });
+                                }
+
                                 setState(() {
                                   Navigator.pop(context);
                                 });
@@ -129,14 +147,7 @@ class _ListEditState extends State<ListEdit> {
                     CircularIconButton(
                         icon: Icons.check,
                         onPress: () {
-                          showConfirmationdDialog(
-                              context: context,
-                              title: "Confirm Edit",
-                              label: "Are you sure with your edit?",
-                              onPress: () {
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    '/list', ModalRoute.withName('/home'));
-                              });
+                          Navigator.pop(context);
                         }),
                   ],
                 ),
