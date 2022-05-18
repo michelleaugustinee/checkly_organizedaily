@@ -61,6 +61,7 @@ class _TasksEditState extends State<TasksEdit> {
                           taskCount = snapshot.data!.docs.length;
                           // return WhiteCheckButton(text: task['name']);
                           return TrashFillButton(
+                            color: "red",
                             text: task['TaskName'],
                             textOnPress: () {
                               final _textFieldController = TextEditingController();
@@ -135,7 +136,7 @@ class _TasksEditState extends State<TasksEdit> {
                         icon: Icons.add,
                         onPress: () {
                           final _textFieldController = TextEditingController();
-                          showTextFieldDialog(
+                          showAddTextFieldDialogColor(
                               textFieldController: _textFieldController,
                               context: context,
                               title: "Add Task",

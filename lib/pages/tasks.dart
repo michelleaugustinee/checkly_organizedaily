@@ -68,6 +68,7 @@ class _TasksState extends State<Tasks> {
                           return WhiteCheckButton(
                               key: ValueKey("${task.id}"),
                               text: task['TaskName'],
+                            color: task["Color"].toString(),
                             status: status,
                             onPress: (){
                                 if(status){

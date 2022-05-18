@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:checkly/components/colors.dart';
 
 class WhiteCheckButton extends StatefulWidget {
 
@@ -6,14 +7,25 @@ class WhiteCheckButton extends StatefulWidget {
   final String text;
   final onPress;
   final bool status;
-  const WhiteCheckButton({Key? key, this.fontSize = 20, required this.text, required this.onPress, required this.status}) : super(key: key);
+  final String color;
+  const WhiteCheckButton({Key? key,
+    this.fontSize = 20,
+    required this.text,
+    required this.onPress,
+    required this.status,
+    required this.color}) : super(key: key);
 
   @override
   State<WhiteCheckButton> createState() => _WhiteCheckButtonState();
 }
 
 class _WhiteCheckButtonState extends State<WhiteCheckButton> {
-
+  List<Color> colorSet = [];
+  @override
+  void initState() {
+    colorSet = TaskColor[widget.color]!;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,9 +45,11 @@ class _WhiteCheckButtonState extends State<WhiteCheckButton> {
           children: [
             Expanded(
               child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
+                  decoration:  BoxDecoration(
+                      color:  widget.status? colorSet[0].withOpacity(0.7): Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    border: Border.all(style: BorderStyle.solid, width: 5, color: colorSet[0])
+                  ),
                   padding: EdgeInsets.symmetric(vertical: 15,horizontal: 15),
                   margin: EdgeInsets.only(right: 15),
                   // width: double.infinity,
@@ -43,7 +57,7 @@ class _WhiteCheckButtonState extends State<WhiteCheckButton> {
                     child: Text(
                       widget.text,
                       style: TextStyle(
-                        color: widget.status? Colors.grey : Colors.black,
+                        color: widget.status? colorSet[2].withOpacity(0.5) : Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: widget.fontSize,
                         decoration: widget.status? TextDecoration.lineThrough :  TextDecoration.none
@@ -52,8 +66,8 @@ class _WhiteCheckButtonState extends State<WhiteCheckButton> {
                   )),
             ),
             widget.status?
-            Icon(Icons.check_box_outlined,size: 50,color: Colors.white,) :
-            Icon(Icons.check_box_outline_blank,size: 50,color: Colors.white,)
+            Icon(Icons.check_box_outlined,size: 50,color: colorSet[0],) :
+            Icon(Icons.check_box_outline_blank,size: 50,color: colorSet[0],)
           ],
         ),
       ),
