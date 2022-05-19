@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 
-const Map<String, List<Color>> TaskColor = {
-  "white" : [Colors.white, Colors.black, Colors.black],
-  "red" : [Colors.red, Colors.white, Colors.black],
-  "green" : [Colors.green, Colors.white, Colors.black],
-  "blue" : [Colors.blue, Colors.white, Colors.black],
+const Map<String, Color> TaskColor = {
+  "white" : Colors.white,
+  "red" : Colors.red,
+  "green" : Colors.green,
+  "blue" : Colors.blue,
 };
 
 class ColorBox extends StatelessWidget {
   final String color;
   final double size;
-
-  const ColorBox({ required this.color, this.size = 20});
+  final bool selected;
+  const ColorBox({ required this.color, this.size = 20, this.selected = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-
       decoration:  BoxDecoration(
-        color: TaskColor[color]![0],
-          border: Border.all(width: 2, color: Colors.black)
+          border:  Border.all(width: 2, color: selected? Colors.black : Colors.grey.withOpacity(0.5))
       ),
-      width: size,
-      height: size,
       margin: EdgeInsets.all(size * 0.1),
-
+      padding: EdgeInsets.all(2),
+      child: Container(
+        width: size,
+        height: size,
+        color: TaskColor[color]
+      ),
     );
   }
 }

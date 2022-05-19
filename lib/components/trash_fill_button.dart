@@ -15,7 +15,7 @@ class TrashFillButton extends StatefulWidget {
     required this.text,
     required this.textOnPress,
     required this.trashOnPress,
-    this.color = "white"
+    required this.color
   })
       : super(key: key);
 
@@ -24,12 +24,7 @@ class TrashFillButton extends StatefulWidget {
 }
 
 class _TrashFillButtonState extends State<TrashFillButton> {
-  List<Color> colorSet = [];
-  @override
-  void initState() {
-    colorSet = TaskColor[widget.color]!;
-    super.initState();
-  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,13 +35,14 @@ class _TrashFillButtonState extends State<TrashFillButton> {
           Expanded(
             child: TextButton(
               style: ElevatedButton.styleFrom(
+
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                  side: BorderSide(color: TaskColor[widget.color]!, width: 5),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 onPrimary: Color.fromRGBO(32, 227, 178, 1),
-                primary: colorSet[0],
-                padding: EdgeInsets.all(0),
-                // primary: Colors.white,
+                primary: Colors.white,
+                padding: EdgeInsets.all(5),
               ),
               onPressed: widget.textOnPress,
               child: Container(
@@ -57,7 +53,7 @@ class _TrashFillButtonState extends State<TrashFillButton> {
                     child: Text(
                       widget.text,
                       style: TextStyle(
-                        color: colorSet[1],
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: widget.fontSize,
                       ),
@@ -73,7 +69,7 @@ class _TrashFillButtonState extends State<TrashFillButton> {
             child: Icon(
               CupertinoIcons.trash_fill,
               size: 45,
-              color:  colorSet[0],
+              color:  TaskColor[widget.color]!,
             ),
           ),
         ],

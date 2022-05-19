@@ -47,22 +47,27 @@ class _TopicsEditState extends State<TopicsEdit> {
                           child: Text("Loading"),
                         );
                       }
+                      if (snapshot.data!.docs.length == 0) {
+                        return Center(
+                          child: Text("No Topic Yet"),
+                        );
+                      }
                       return ListView(
                         children: snapshot.data!.docs.map((topic) {
                           topicsCount = snapshot.data!.docs.length;
                           // return WhiteCheckButton(text: task['name']);
                           return TrashFillButton(
+                            color: "white",
                             text: topic['TopicName'],
                             textOnPress: () {
                               final _textFieldController = TextEditingController();
-
-                              showEditTextFieldDialog(
-                                  textFieldController:_textFieldController,
+                              showTopicTextFieldDialog(
+                                  textFieldController: _textFieldController,
                                   context: context,
-                                  title: "Edit Task",
-                                  label: "Topic Name",
+                                  title: "Edit Topic",
                                   initialText: topic['TopicName'],
-                                  onPress: (){
+                                  label: "Topic Name",
+                                  onPress: () {
                                     topicsCollection.doc(topic.id).update({'TopicName': _textFieldController.text});
                                     setState(() {
                                       Navigator.pop(context);
@@ -76,10 +81,11 @@ class _TopicsEditState extends State<TopicsEdit> {
                                   label: "Are you sure want to delete this task?",
                                   onPress: () {
                                     int index = topic["OrderIndex"];
-                                    topicsCollection.doc(topic.id).delete();
+                                    String id = topic.id;
+                                    topicsCollection.doc(id).delete();
                                     EditModeFunction()
-                                        .deleteReoderFirestore(
-                                        index, topicsCount, snapshot,topicsCollection);
+                                        .deleteTopicFirestore(
+                                        id, index, topicsCount, snapshot,topicsCollection);
                                     setState(() {
                                       Navigator.pop(context);
                                     });
@@ -122,11 +128,12 @@ class _TopicsEditState extends State<TopicsEdit> {
                         icon: Icons.add,
                         onPress: () {
                           final _textFieldController = TextEditingController();
-                          showTextFieldDialog(
+                          showTopicTextFieldDialog(
                               textFieldController: _textFieldController,
                               context: context,
                               title: "Create New Topic",
                               label: "Topic Name",
+                              initialText: "",
                               onPress: () {
                                 if (_textFieldController.text != "") {
                                   CollectionReference topics = FirebaseFirestore

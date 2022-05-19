@@ -61,25 +61,24 @@ class _TasksEditState extends State<TasksEdit> {
                           taskCount = snapshot.data!.docs.length;
                           // return WhiteCheckButton(text: task['name']);
                           return TrashFillButton(
-                            color: "red",
+                            color: task["Color"],
                             text: task['TaskName'],
                             textOnPress: () {
                               final _textFieldController = TextEditingController();
-
-                              showEditTextFieldDialog(
+                               showTaskTextFieldDialog(
                                   textFieldController:_textFieldController,
                                   context: context,
                                   title: "Edit Task",
                                   label: "Task Name",
                                   initialText: task['TaskName'],
-                                  onPress: (){
-
-                                    taskCollection.doc(task.id).update({'TaskName': _textFieldController.text});
-
+                                  initialColor: task['Color'],
+                                  onPress: (String color){
+                                    taskCollection.doc(task.id).update({'TaskName': _textFieldController.text, 'Color': color});
                                     setState(() {
                                       Navigator.pop(context);
                                     });
                                   });
+
                             },
                             trashOnPress: () {
 
@@ -91,7 +90,7 @@ class _TasksEditState extends State<TasksEdit> {
                                     int index = task["OrderIndex"];
                                     taskCollection.doc(task.id).delete();
                                     EditModeFunction()
-                                        .deleteReoderFirestore(
+                                        .deleteTaskFirestore(
                                         index, taskCount, snapshot, taskCollection);
                                     setState(() {
                                       Navigator.pop(context);
@@ -136,20 +135,24 @@ class _TasksEditState extends State<TasksEdit> {
                         icon: Icons.add,
                         onPress: () {
                           final _textFieldController = TextEditingController();
-                          showAddTextFieldDialogColor(
+                          showTaskTextFieldDialog(
                               textFieldController: _textFieldController,
                               context: context,
                               title: "Add Task",
+                              initialText: "",
+                              initialColor: "white",
                               label: "Task Name",
-                              onPress: () {
-                                CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
-                                taskCollection.add({
-                                  'TaskName': _textFieldController.text,
-                                  'OrderIndex': taskCount,
-                                  'TopicID': widget.topicID,
-                                  'Color': "red",
-                                  'Status': false
-                                });
+                              onPress: (String color) {
+                                if(_textFieldController.text != ""){
+                                  CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
+                                  taskCollection.add({
+                                    'TaskName': _textFieldController.text,
+                                    'OrderIndex': taskCount,
+                                    'TopicID': widget.topicID,
+                                    'Color': color,
+                                    'Status': false
+                                  });
+                                }
                                 setState(() {
                                   Navigator.pop(context);
                                 });
@@ -158,8 +161,9 @@ class _TasksEditState extends State<TasksEdit> {
                     CircularIconButton(
                         icon: Icons.check,
                         onPress: () {
-                          Navigator.pop(context);
-
+                          setState(() {
+                            Navigator.pop(context);
+                          });
                         }),
                   ],
                 ),
