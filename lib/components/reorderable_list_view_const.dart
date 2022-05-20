@@ -1,3 +1,4 @@
+import 'package:checkly/utils/database_provider.dart';
 import 'package:flutter/material.dart';
 
 class ReorderableListViewCheckly{
@@ -24,6 +25,24 @@ class ReorderableListViewCheckly{
       }
       String id = snapshot.data!.docs[oldIndex].id;
       collectionRef.doc(id).update({'OrderIndex': newIndex});
+    }
+  }
+
+  onReorderTopicLocal(oldIndex, newIndex, snapshot){
+    if(newIndex > oldIndex){
+      for(int i = oldIndex + 1; i < newIndex; i++){
+        int id = snapshot.data.elementAt(i).id;
+        dbHelper.instance.reoderTopic(id, i-1);
+      }
+      int id = snapshot.data.elementAt(oldIndex).id;
+      dbHelper.instance.reoderTopic(id, newIndex-1);
+    }else{
+      for(int i = oldIndex - 1; i >= newIndex; i--){
+        int id = snapshot.data.elementAt(i).id;
+        dbHelper.instance.reoderTopic(id, i+1);
+      }
+      int id = snapshot.data.elementAt(oldIndex).id;
+      dbHelper.instance.reoderTopic(id, newIndex);
     }
   }
 

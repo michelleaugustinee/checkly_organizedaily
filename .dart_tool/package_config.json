@@ -320,6 +320,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "sqflite",
+      "rootUri": "file:///G:/Software/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.0.2+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "sqflite_common",
+      "rootUri": "file:///G:/Software/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite_common-2.2.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "stack_trace",
       "rootUri": "file:///G:/Software/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0",
       "packageUri": "lib/",
@@ -336,6 +348,12 @@
       "rootUri": "file:///G:/Software/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "synchronized",
+      "rootUri": "file:///G:/Software/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0+2",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
     },
     {
       "name": "term_glyph",
@@ -380,7 +398,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-05-18T03:00:08.202575Z",
+  "generated": "2022-05-20T11:57:06.187413Z",
   "generator": "pub",
   "generatorVersion": "2.16.0"
 }

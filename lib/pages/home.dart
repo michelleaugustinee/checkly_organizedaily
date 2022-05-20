@@ -14,8 +14,10 @@ import 'package:checkly/components/opaque_container_child.dart';
 import 'package:checkly/components/white_text_button.dart';
 import 'package:checkly/components/gradient_background.dart';
 import 'package:checkly/components/circular_icon_button.dart';
-
+import 'package:checkly/utils/database_provider.dart';
 import 'package:intl/intl.dart';
+
+import '../model/db_models.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -31,6 +33,11 @@ class _HomeState extends State<Home> {
   User? user;
   String UID = "NoUser";
 
+  Future<List<Topic>> getTopic() async {
+    Future<List<Topic>> Topics = dbHelper.instance.getTopics();
+    return Topics;
+  }
+
   @override
   Widget build(BuildContext context) {
     user = FirebaseAuth.instance.currentUser;
@@ -45,6 +52,7 @@ class _HomeState extends State<Home> {
         .orderBy("OrderIndex");
     CollectionReference topicsCollection =
         FirebaseFirestore.instance.collection("Topics");
+
     return GradientBackground(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -81,6 +89,7 @@ class _HomeState extends State<Home> {
                   SizedBox(
                     height: 5,
                   ),
+                  user != null?
                   Expanded(
                     child: StreamBuilder(
                       stream: topics.snapshots(),
@@ -115,6 +124,52 @@ class _HomeState extends State<Home> {
                         );
                       },
                     ),
+                  )
+                  : Expanded(
+                    child: FutureBuilder(
+                      future: getTopic(),
+                      builder: (context, AsyncSnapshot<List<Topic>> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: Text("Loading"),
+                          );
+                        }
+                        if (snapshot.data!.length == 0) {
+                          return Center(
+                            child: Text("No Topic Yet"),
+                          );
+                        }
+                        return ReorderableListView(
+                          children: snapshot.data!.map((topic) {
+                            return WhiteTextCard(
+                                key: ValueKey(topic.id.toString()),
+                                text: topic.TopicName,
+                                onPress: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Tasks(
+                                          topicID: topic.id.toString(),
+                                          topicName: topic.TopicName,
+                                        )),
+                                  );
+                                });
+                          }).toList(),
+                          onReorder: (oldIndex, newIndex) {
+                            ReorderableListViewCheckly().onReorderTopicLocal(
+                                oldIndex, newIndex, snapshot);
+                            setState(() {
+                              getTopic();
+                            });
+                          },
+                          proxyDecorator: (Widget child, int index,
+                              Animation<double> animation) {
+                            return ReorderableListViewCheckly()
+                                .proxyDecorator(child);
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ],
               )),
@@ -135,9 +190,10 @@ class _HomeState extends State<Home> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                            builder: (context) => TopicsEdit(UID: UID,
+                            builder: (context) => TopicsEdit(
+                              UID: UID,
                           ))
-                        );
+                        ).then((_) => setState(() {}));
                       }),
                 ],
               ),
