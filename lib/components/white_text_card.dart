@@ -37,6 +37,7 @@ class WhiteTextCard extends StatelessWidget {
             width: double.infinity,
             child: Text(
               text,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,

@@ -9,18 +9,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../components/edit_mode_function.dart';
 import '../components/white_check_button.dart';
 
-class ListEdit extends StatefulWidget {
+class TasksEdit extends StatefulWidget {
+  final String topicID;
+  final String topicName;
+  const TasksEdit({Key? key, required this.topicID, required this.topicName}) : super(key: key);
   @override
-  _ListEditState createState() => _ListEditState();
+  _TasksEditState createState() => _TasksEditState();
 }
 
-class _ListEditState extends State<ListEdit> {
+class _TasksEditState extends State<TasksEdit> {
   int taskCount = 0;
   @override
   Widget build(BuildContext context) {
-    Query tasks = FirebaseFirestore.instance.collection("Tasks").orderBy("OrderIndex");
+    Query tasks = FirebaseFirestore.instance.collection("Tasks").where("TopicID", isEqualTo: widget.topicID).orderBy("OrderIndex");
     CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
 
 
@@ -35,7 +39,8 @@ class _ListEditState extends State<ListEdit> {
         body: SafeArea(
           child: Column(
             children: [
-              OpaqueContainerText(text: "Shopping List"),
+              OpaqueContainerText(text: "Tasks Edit"),
+              OpaqueContainerText(text: widget.topicName),
               Expanded(
                 child: OpaqueContainerChild(
                   child: StreamBuilder(
@@ -43,7 +48,12 @@ class _ListEditState extends State<ListEdit> {
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
-                          child: Text("Loading"),
+                          child: Text("Loading..."),
+                        );
+                      }
+                      if(snapshot.data!.docs.length == 0){
+                        return Center(
+                          child: Text("No Tasks Yet"),
                         );
                       }
                       return ListView(
@@ -51,25 +61,42 @@ class _ListEditState extends State<ListEdit> {
                           taskCount = snapshot.data!.docs.length;
                           // return WhiteCheckButton(text: task['name']);
                           return TrashFillButton(
+                            color: task["Color"],
                             text: task['TaskName'],
                             textOnPress: () {
                               final _textFieldController = TextEditingController();
-
-                              showEditTextFieldDialog(
+                               showTaskTextFieldDialog(
                                   textFieldController:_textFieldController,
                                   context: context,
                                   title: "Edit Task",
                                   label: "Task Name",
-                                  initialText: task['name'],
-                                  onPress: (){
-                                    taskCollection.doc(task.id).update({'TaskName': _textFieldController.text});
+                                  initialText: task['TaskName'],
+                                  initialColor: task['Color'],
+                                  onPress: (String color){
+                                    taskCollection.doc(task.id).update({'TaskName': _textFieldController.text, 'Color': color});
                                     setState(() {
                                       Navigator.pop(context);
                                     });
                                   });
+
                             },
                             trashOnPress: () {
-                              taskCollection.doc(task.id).delete();
+
+                              showConfirmationdDialog(
+                                  context: context,
+                                  title: "Confirm Delete",
+                                  label: "Are you sure want to delete this task?",
+                                  onPress: () {
+                                    int index = task["OrderIndex"];
+                                    taskCollection.doc(task.id).delete();
+                                    EditModeFunction()
+                                        .deleteTaskFirestore(
+                                        index, taskCount, snapshot, taskCollection);
+                                    setState(() {
+                                      Navigator.pop(context);
+                                    });
+                                  });
+
                             },
                           );
                         }).toList(),
@@ -108,19 +135,24 @@ class _ListEditState extends State<ListEdit> {
                         icon: Icons.add,
                         onPress: () {
                           final _textFieldController = TextEditingController();
-                          showTextFieldDialog(
+                          showTaskTextFieldDialog(
                               textFieldController: _textFieldController,
                               context: context,
                               title: "Add Task",
+                              initialText: "",
+                              initialColor: "white",
                               label: "Task Name",
-                              onPress: () {
-                                CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
-                                taskCollection.add({
-                                  'TaskName': _textFieldController.text,
-                                  'OrderIndex': taskCount,
-                                  'ListID': "test",
-                                  'Color': "red",
-                                });
+                              onPress: (String color) {
+                                if(_textFieldController.text != ""){
+                                  CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
+                                  taskCollection.add({
+                                    'TaskName': _textFieldController.text,
+                                    'OrderIndex': taskCount,
+                                    'TopicID': widget.topicID,
+                                    'Color': color,
+                                    'Status': false
+                                  });
+                                }
                                 setState(() {
                                   Navigator.pop(context);
                                 });
@@ -129,14 +161,9 @@ class _ListEditState extends State<ListEdit> {
                     CircularIconButton(
                         icon: Icons.check,
                         onPress: () {
-                          showConfirmationdDialog(
-                              context: context,
-                              title: "Confirm Edit",
-                              label: "Are you sure with your edit?",
-                              onPress: () {
-                                Navigator.pushNamedAndRemoveUntil(context,
-                                    '/list', ModalRoute.withName('/home'));
-                              });
+                          setState(() {
+                            Navigator.pop(context);
+                          });
                         }),
                   ],
                 ),

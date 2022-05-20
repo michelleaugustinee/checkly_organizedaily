@@ -1,18 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
+import 'package:checkly/components/colors.dart';
 
 class TrashFillButton extends StatefulWidget {
   final double fontSize;
   final String text;
   final textOnPress;
   final trashOnPress;
+  final String color;
 
   TrashFillButton({Key? key,
     this.fontSize = 20,
     required this.text,
     required this.textOnPress,
-    required this.trashOnPress
+    required this.trashOnPress,
+    required this.color
   })
       : super(key: key);
 
@@ -21,6 +24,8 @@ class TrashFillButton extends StatefulWidget {
 }
 
 class _TrashFillButtonState extends State<TrashFillButton> {
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
@@ -30,13 +35,14 @@ class _TrashFillButtonState extends State<TrashFillButton> {
           Expanded(
             child: TextButton(
               style: ElevatedButton.styleFrom(
+
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
+                  side: BorderSide(color: TaskColor[widget.color]!, width: 5),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 onPrimary: Color.fromRGBO(32, 227, 178, 1),
                 primary: Colors.white,
-                padding: EdgeInsets.all(0),
-                // primary: Colors.white,
+                padding: EdgeInsets.all(5),
               ),
               onPressed: widget.textOnPress,
               child: Container(
@@ -46,6 +52,7 @@ class _TrashFillButtonState extends State<TrashFillButton> {
                   child: Center(
                     child: Text(
                       widget.text,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -63,7 +70,7 @@ class _TrashFillButtonState extends State<TrashFillButton> {
             child: Icon(
               CupertinoIcons.trash_fill,
               size: 45,
-              color: Colors.white,
+              color:  TaskColor[widget.color]!,
             ),
           ),
         ],
