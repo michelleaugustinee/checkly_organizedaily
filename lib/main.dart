@@ -19,11 +19,7 @@ Future<void> main() async{
     initialRoute = '/home';
   }
   runApp(MaterialApp(
-<<<<<<< HEAD
-    initialRoute: '/login',
-=======
     initialRoute: initialRoute,
->>>>>>> fb29f976c93f6f6a8ec1ade11f5e0721f4a2794a
     routes: {
       '/login': (context) => Login(),
       '/home': (context) => Home(),
