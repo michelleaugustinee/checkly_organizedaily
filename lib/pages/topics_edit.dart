@@ -7,21 +7,29 @@ import 'package:checkly/components/opaque_container_text.dart';
 import 'package:checkly/components/trash_fill_button.dart';
 import 'package:checkly/model/todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../components/white_check_button.dart';
 
 class TopicsEdit extends StatefulWidget {
+  String UID;
+
+  TopicsEdit({Key? key, required this.UID}) : super(key: key);
+
   @override
   _TopicsEditState createState() => _TopicsEditState();
 }
 
 class _TopicsEditState extends State<TopicsEdit> {
   int topicsCount = 0;
+
   @override
   Widget build(BuildContext context) {
-    Query topics = FirebaseFirestore.instance.collection("Topics").orderBy("OrderIndex");
+    Query topics = FirebaseFirestore.instance.collection("Topics")
+        .where("UserID", isEqualTo: widget.UID)
+        .orderBy("OrderIndex");
     CollectionReference topicsCollection = FirebaseFirestore.instance.collection("Topics");
 
 
@@ -96,27 +104,6 @@ class _TopicsEditState extends State<TopicsEdit> {
                       );
                     },
                   ),
-                  // child: Expanded(
-                  //   child: ListView.builder(
-                  //       itemCount: todos.length,
-                  //       itemBuilder: (context, index){
-                  //         return TrashFillButton(
-                  //           text: todos[index].title,
-                  //           textOnPress: (){
-                  //             showEditTextFieldDialog(context: context,
-                  //                 title: "Edit Task",
-                  //                 label: "Task Name",
-                  //                 initialText: todos[index].title,
-                  //                 onPress: (){
-                  //                   setState(() {
-                  //                     Navigator.pop(context);
-                  //                   });
-                  //                 }
-                  //             );
-                  //           },
-                  //           trashOnPress: (){},);
-                  //       }),
-                  // )
                 ),
               ),
               Container(
@@ -135,15 +122,29 @@ class _TopicsEditState extends State<TopicsEdit> {
                               label: "Topic Name",
                               initialText: "",
                               onPress: () {
+
                                 if (_textFieldController.text != "") {
-                                  CollectionReference topics = FirebaseFirestore
-                                      .instance
-                                      .collection("Topics");
-                                  topics.add({
-                                    'TopicName': _textFieldController.text,
-                                    'OrderIndex': topicsCount,
-                                    'UserID': 'test'
-                                  });
+                                  User? user = FirebaseAuth.instance.currentUser;
+                                  if(user != null){
+                                    CollectionReference topics = FirebaseFirestore
+                                        .instance
+                                        .collection("Topics");
+                                    topics.add({
+                                      'TopicName': _textFieldController.text,
+                                      'OrderIndex': topicsCount,
+                                      'UserID': user.uid
+                                    });
+                                  }else{
+                                    CollectionReference topics = FirebaseFirestore
+                                        .instance
+                                        .collection("Topics");
+                                    topics.add({
+                                      'TopicName': _textFieldController.text,
+                                      'OrderIndex': topicsCount,
+                                      'UserID': 'NoUser'
+                                    });
+                                  }
+
                                 }
 
                                 setState(() {

@@ -27,22 +27,22 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final DateTime now = DateTime.now();
-  bool hasUser = false;
+
   User? user;
-  int topicsCount = 0;
-  @override
-  void initState() {
-    user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      hasUser = true;
-    }
-    super.initState();
-  }
+  String UID = "NoUser";
 
   @override
   Widget build(BuildContext context) {
-    Query topics =
-        FirebaseFirestore.instance.collection("Topics").orderBy("OrderIndex");
+    user = FirebaseAuth.instance.currentUser;
+    if(user != null){
+      UID = user!.uid;
+    }else{
+      UID = "NoUser";
+    }
+    Query topics = FirebaseFirestore.instance
+        .collection("Topics")
+        .where("UserID", isEqualTo: UID)
+        .orderBy("OrderIndex");
     CollectionReference topicsCollection =
         FirebaseFirestore.instance.collection("Topics");
     return GradientBackground(
@@ -56,23 +56,14 @@ class _HomeState extends State<Home> {
         body: SafeArea(
             child: Column(
           children: [
-            hasUser
-                ? FutureBuilder(
-                    future: SharedPreferenceUtil().getName(),
-                    builder: (context, snapshot) {
-                      return OpaqueContainerText(
-                        text: "Hello ${user!.displayName} :)",
-                        fontSize: 40,
-                      );
-                    })
-                : FutureBuilder(
-                    future: SharedPreferenceUtil().getName(),
-                    builder: (context, snapshot) {
-                      return OpaqueContainerText(
-                        text: "Hello ${snapshot.data.toString()} :)",
-                        fontSize: 40,
-                      );
-                    }),
+             FutureBuilder(
+                 future: SharedPreferenceUtil().getName(),
+                 builder: (context, snapshot) {
+                    return OpaqueContainerText(
+                      text: "Hello ${snapshot.data.toString()} :)",
+                      fontSize: 40,
+                    );
+                 }),
             OpaqueContainerText(
               text: DateFormat('EEEE, d MMMM y').format(now),
               fontSize: 20,
@@ -102,7 +93,6 @@ class _HomeState extends State<Home> {
                         }
                         return ReorderableListView(
                           children: snapshot.data!.docs.map((topic) {
-                            topicsCount = snapshot.data!.docs.length;
                             return WhiteTextCard(
                                 key: ValueKey("${topic.id}"),
                                 text: topic['TopicName'],
@@ -137,7 +127,7 @@ class _HomeState extends State<Home> {
                   CircularIconButton(
                       icon: Icons.settings_outlined,
                       onPress: () {
-                        Navigator.pushNamed(context, '/settings');
+                        Navigator.pushNamed(context, '/settings').then((_) => setState(() {}));
                       }),
                   CircularIconButton(
                       icon: Icons.edit,
@@ -145,7 +135,7 @@ class _HomeState extends State<Home> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                            builder: (context) => TopicsEdit(
+                            builder: (context) => TopicsEdit(UID: UID,
                           ))
                         );
                       }),

@@ -29,6 +29,7 @@ showTopicTextFieldDialog({context, title, initialText, label, onPress, textField
                     decorationColor: Color.fromRGBO(32, 227, 178, 1),
                   ),
                 ),
+                maxLines: null,
               ),
             ),
           ),
@@ -97,8 +98,8 @@ class _EditTaskTextFieldDialogState extends State<EditTaskTextFieldDialog> {
       scrollable: true,
       title: Center(child: Text(widget.title)),
       content:Container(
-        width: 300,
-        height: 175,
+        // width: 300,
+        // height: 175,
         child:Column(
           children: [
             Form(
@@ -113,37 +114,41 @@ class _EditTaskTextFieldDialogState extends State<EditTaskTextFieldDialog> {
                   labelStyle: TextStyle(
                     color: Colors.grey,
                     decorationColor: Color.fromRGBO(32, 227, 178, 1),
-                  ),
-
+                  )
                 ),
+                maxLines: null,
               ),
             ),
             SizedBox(height: 20,),
-            GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 6,
-                ),
-                itemCount: TaskColor.keys.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var colors = TaskColor.keys.toList();
-                  if(colors[index] == initialColor && selectedColor < 0){
-                    selectedColor = index;
-                    color = colors[selectedColor];
-                  }
-                  return GestureDetector(
-                      onTap: (){
-                        setState((){
-                          selectedColor = index;
-                          color = colors[selectedColor];
-                        });
-                      },
-                      child: ColorBox(
-                        color: colors[index],
-                        selected: selectedColor == index? true : false,
-                      )
-                  );
-                }),
+            Container(
+              width: 300,
+              height: 50,
+              child: GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 6,
+                  ),
+                  itemCount: TaskColor.keys.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var colors = TaskColor.keys.toList();
+                    if(colors[index] == initialColor && selectedColor < 0){
+                      selectedColor = index;
+                      color = colors[selectedColor];
+                    }
+                    return GestureDetector(
+                        onTap: (){
+                          setState((){
+                            selectedColor = index;
+                            color = colors[selectedColor];
+                          });
+                        },
+                        child: ColorBox(
+                          color: colors[index],
+                          selected: selectedColor == index? true : false,
+                        )
+                    );
+                  }),
+            ),
           ],
         ),
       ),

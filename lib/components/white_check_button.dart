@@ -53,6 +53,7 @@ class _WhiteCheckButtonState extends State<WhiteCheckButton> {
                   child: Center(
                     child: Text(
                       widget.text,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: widget.status? Colors.grey : Colors.black,
                         fontWeight: FontWeight.bold,

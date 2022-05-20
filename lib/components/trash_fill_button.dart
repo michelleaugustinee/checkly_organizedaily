@@ -52,6 +52,7 @@ class _TrashFillButtonState extends State<TrashFillButton> {
                   child: Center(
                     child: Text(
                       widget.text,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
