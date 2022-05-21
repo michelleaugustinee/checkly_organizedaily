@@ -81,6 +81,7 @@ class _TasksEditState extends State<TasksEdit> {
                                   label: "Task Name",
                                   initialText: task['TaskName'],
                                   initialColor: task['Color'],
+                                   button: "Edit",
                                   onPress: (String color){
                                     taskCollection.doc(task.id).update({'TaskName': _textFieldController.text, 'Color': color});
                                     setState(() {
@@ -141,6 +142,7 @@ class _TasksEditState extends State<TasksEdit> {
                                   label: "Task Name",
                                   initialText: task.TasksName,
                                   initialColor: task.Color,
+                                  button: "Edit",
                                   onPress: (String color){
                                     // taskCollection.doc(task.id).update({'TaskName': _textFieldController.text, 'Color': color});
                                     dbHelper.instance.updateTask(task.id as int, _textFieldController.text, color);
@@ -190,6 +192,7 @@ class _TasksEditState extends State<TasksEdit> {
                               initialText: "",
                               initialColor: "white",
                               label: "Task Name",
+                              button: "Add",
                               onPress: (String color) {
                                 if(_textFieldController.text != ""){
                                   if(widget.UID == "NoUser"){

@@ -79,6 +79,7 @@ class _TopicsEditState extends State<TopicsEdit> {
                                   title: "Edit Topic",
                                   initialText: topic['TopicName'],
                                   label: "Topic Name",
+                                  button: "Edit",
                                   onPress: () {
                                     topicsCollection.doc(topic.id).update({'TopicName': _textFieldController.text});
                                     setState(() {
@@ -136,6 +137,7 @@ class _TopicsEditState extends State<TopicsEdit> {
                                     title: "Edit Topic",
                                     initialText: topic.TopicName,
                                     label: "Topic Name",
+                                    button: "Edit",
                                     onPress: () {
                                       dbHelper.instance.updateTopic(topic, _textFieldController.text);
                                       setState(() {
@@ -181,6 +183,7 @@ class _TopicsEditState extends State<TopicsEdit> {
                               title: "Create New Topic",
                               label: "Topic Name",
                               initialText: "",
+                              button: "Add",
                               onPress: () {
 
                                 if (_textFieldController.text != "") {

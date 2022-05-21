@@ -2,7 +2,7 @@ import 'package:checkly/components/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-showTopicTextFieldDialog({context, title, initialText, label, onPress, textFieldController}) {
+showTopicTextFieldDialog({context, title, initialText, label, onPress, textFieldController, button}) {
   textFieldController.text = initialText;
   showDialog(
       context: context,
@@ -43,7 +43,7 @@ showTopicTextFieldDialog({context, title, initialText, label, onPress, textField
                   padding: EdgeInsets.all(0),
                   primary: Color.fromRGBO(32, 227, 178, 1),
                 ),
-                child: Text("Add"),
+                child: Text(button),
                 onPressed: onPress)
                 //     () {
                 //   test.add({'name': _textFieldController.text});
@@ -64,6 +64,7 @@ class EditTaskTextFieldDialog extends StatefulWidget {
   final label;
   final onPress;
   final textFieldController;
+  final button;
 
   EditTaskTextFieldDialog({
     required this.onPress,
@@ -72,7 +73,8 @@ class EditTaskTextFieldDialog extends StatefulWidget {
     required this.initialColor,
     required this.context,
     required this.textFieldController,
-    required this.label
+    required this.label,
+    required this.button
   });
 
   @override
@@ -162,7 +164,7 @@ class _EditTaskTextFieldDialogState extends State<EditTaskTextFieldDialog> {
               padding: EdgeInsets.all(0),
               primary: Color.fromRGBO(32, 227, 178, 1),
             ),
-            child: Text("Edit"),
+            child: Text(widget.button),
             onPressed: (){
               widget.onPress(color);
             }
@@ -172,7 +174,7 @@ class _EditTaskTextFieldDialogState extends State<EditTaskTextFieldDialog> {
   }
 }
 
-showTaskTextFieldDialog({context, title, initialText ,initialColor, label, onPress,textFieldController}){
+showTaskTextFieldDialog({context, title, initialText ,initialColor, label, onPress,textFieldController, button}){
   textFieldController.text = initialText;
   showDialog(
       context: context,
@@ -184,7 +186,9 @@ showTaskTextFieldDialog({context, title, initialText ,initialColor, label, onPre
             initialColor: initialColor,
             context: context,
             textFieldController: textFieldController,
-            label: label);
+            label: label,
+          button: button,
+        );
       });
 }
 
