@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class EditModeFunction{
   deleteTopicFirestore(id, index, length, snapshot, collectionRef){
-    _deleteTopicTask(id);
+    _deleteTopicTaskFirestore(id);
     for(int i = index + 1; i < length; i++){
       String id = snapshot.data!.docs[i].id;
       collectionRef.doc(id).update({'OrderIndex': i-1});
@@ -14,7 +14,7 @@ class EditModeFunction{
 
   }
 
-  _deleteTopicTask(id)async{
+  _deleteTopicTaskFirestore(id)async{
     Stream<QuerySnapshot> tasks = await FirebaseFirestore.instance.collection("Tasks").where("TopicID", isEqualTo: id).snapshots();
     CollectionReference taskCollection = FirebaseFirestore.instance.collection("Tasks");
     
@@ -35,10 +35,29 @@ class EditModeFunction{
   }
 
   deleteTopicLocal(id, index, length, snapshot){
+    _deleteTopicTaskLocal(id);
     for(int i = index + 1; i < length; i++){
       int id = snapshot.data.elementAt(i).id;
       dbHelper.instance.reoderTopic(id, i-1);
     }
     dbHelper.instance.removeTopic(id);
+  }
+
+  deleteTaskLocal(id, index, length, snapshot){
+
+    for(int i = index + 1; i < length; i++){
+      int id = snapshot.data.elementAt(i).id;
+      dbHelper.instance.reoderTask(id, i-1);
+    }
+    dbHelper.instance.removeTask(id);
+  }
+  _deleteTopicTaskLocal(id)async{
+    List tasks = await dbHelper.instance.getTasks(id.toString());
+
+    tasks.forEach((e) {
+      dbHelper.instance.removeTask(e.id);
+    });
+
+
   }
 }

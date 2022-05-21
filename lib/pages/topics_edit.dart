@@ -26,10 +26,6 @@ class TopicsEdit extends StatefulWidget {
 class _TopicsEditState extends State<TopicsEdit> {
   int topicsCount = 0;
 
-  Future<List<Topic>> getTopic() async {
-    Future<List<Topic>> Topics = dbHelper.instance.getTopics();
-    return Topics;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,65 +108,62 @@ class _TopicsEditState extends State<TopicsEdit> {
                       );
                     },
                   )
-                          : Expanded(
-                        child: FutureBuilder(
-                          future: getTopic(),
-                          builder: (context, AsyncSnapshot<List<Topic>> snapshot) {
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: Text("Loading"),
-                              );
-                            }
-                            if (snapshot.data!.length == 0) {
-                              return Center(
-                                child: Text("No Topic Yet"),
-                              );
-                            }
-                            return ListView(
-                              children: snapshot.data!.map((topic) {
-                                topicsCount = snapshot.data!.length;
-                                // return WhiteCheckButton(text: task['name']);
-                                return TrashFillButton(
-                                  color: "white",
-                                  text: topic.TopicName,
-                                  textOnPress: () {
-                                    final _textFieldController = TextEditingController();
-                                    showTopicTextFieldDialog(
-                                        textFieldController: _textFieldController,
-                                        context: context,
-                                        title: "Edit Topic",
-                                        initialText: topic.TopicName,
-                                        label: "Topic Name",
-                                        onPress: () {
-                                          dbHelper.instance.updateTopic(topic, _textFieldController.text);
-                                          setState(() {
-                                            Navigator.pop(context);
-                                          });
-                                        });
-                                  },
-                                  trashOnPress: () {
-                                    showConfirmationdDialog(
-                                        context: context,
-                                        title: "Confirm Delete",
-                                        label: "Are you sure want to delete this task?",
-                                        onPress: () {
-                                          int index = topic.OrderIndex;
-                                          int id = topic.id as int;
-                                          EditModeFunction()
-                                              .deleteTopicLocal(
-                                              id, index, topicsCount, snapshot);
-                                          setState(() {
-                                            Navigator.pop(context);
-                                          });
-                                        });
-                                  },
-                                );
-                              }).toList(),
+                  : FutureBuilder(
+                      future: dbHelper.instance.getTopics(),
+                      builder: (context, AsyncSnapshot<List<Topic>> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: Text("Loading"),
+                          );
+                        }
+                        if (snapshot.data!.length == 0) {
+                          return Center(
+                            child: Text("No Topic Yet"),
+                          );
+                        }
+                        return ListView(
+                          children: snapshot.data!.map((topic) {
+                            topicsCount = snapshot.data!.length;
+                            // return WhiteCheckButton(text: task['name']);
+                            return TrashFillButton(
+                              color: "white",
+                              text: topic.TopicName,
+                              textOnPress: () {
+                                final _textFieldController = TextEditingController();
+                                showTopicTextFieldDialog(
+                                    textFieldController: _textFieldController,
+                                    context: context,
+                                    title: "Edit Topic",
+                                    initialText: topic.TopicName,
+                                    label: "Topic Name",
+                                    onPress: () {
+                                      dbHelper.instance.updateTopic(topic, _textFieldController.text);
+                                      setState(() {
+                                        Navigator.pop(context);
+                                      });
+                                    });
+                              },
+                              trashOnPress: () {
+                                showConfirmationdDialog(
+                                    context: context,
+                                    title: "Confirm Delete",
+                                    label: "Are you sure want to delete this task?",
+                                    onPress: () {
+                                      int index = topic.OrderIndex;
+                                      int id = topic.id as int;
+                                      EditModeFunction()
+                                          .deleteTopicLocal(
+                                          id, index, topicsCount, snapshot);
+                                      setState(() {
+                                        Navigator.pop(context);
+                                      });
+                                    });
+                              },
                             );
-                          },
-                        ),
-                      ),
-
+                          }).toList(),
+                        );
+                      },
+                    ),
                 ),
               ),
               Container(
@@ -193,7 +186,7 @@ class _TopicsEditState extends State<TopicsEdit> {
                                 if (_textFieldController.text != "") {
                                   if(widget.UID == "NoUser"){
                                     dbHelper.instance.addTopic(
-                                        new Topic(
+                                        Topic(
                                             OrderIndex: topicsCount,
                                             TopicName: _textFieldController.text));
                                   }else{

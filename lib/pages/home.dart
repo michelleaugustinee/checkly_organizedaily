@@ -33,11 +33,6 @@ class _HomeState extends State<Home> {
   User? user;
   String UID = "NoUser";
 
-  Future<List<Topic>> getTopic() async {
-    Future<List<Topic>> Topics = dbHelper.instance.getTopics();
-    return Topics;
-  }
-
   @override
   Widget build(BuildContext context) {
     user = FirebaseAuth.instance.currentUser;
@@ -108,7 +103,12 @@ class _HomeState extends State<Home> {
                                 onPress: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => Tasks(topicID: topic.id, topicName: topic["TopicName"],)),
+                                    MaterialPageRoute(
+                                        builder: (context) => Tasks(
+                                          topicID: topic.id,
+                                          topicName: topic["TopicName"],
+                                          UID: UID,
+                                        )),
                                   );
                                 });
                           }).toList(),
@@ -127,7 +127,7 @@ class _HomeState extends State<Home> {
                   )
                   : Expanded(
                     child: FutureBuilder(
-                      future: getTopic(),
+                      future: dbHelper.instance.getTopics(),
                       builder: (context, AsyncSnapshot<List<Topic>> snapshot) {
                         if (!snapshot.hasData) {
                           return Center(
@@ -151,6 +151,7 @@ class _HomeState extends State<Home> {
                                         builder: (context) => Tasks(
                                           topicID: topic.id.toString(),
                                           topicName: topic.TopicName,
+                                          UID: UID,
                                         )),
                                   );
                                 });
@@ -158,9 +159,7 @@ class _HomeState extends State<Home> {
                           onReorder: (oldIndex, newIndex) {
                             ReorderableListViewCheckly().onReorderTopicLocal(
                                 oldIndex, newIndex, snapshot);
-                            setState(() {
-                              getTopic();
-                            });
+                            setState(() {});
                           },
                           proxyDecorator: (Widget child, int index,
                               Animation<double> animation) {

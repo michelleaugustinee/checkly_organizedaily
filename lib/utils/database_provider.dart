@@ -32,18 +32,29 @@ class dbHelper{
       CREATE TABLE 
       Tasks (
       ID INTEGER PRIMARY KEY AUTOINCREMENT,
-      TasksName TEXT,
+      TaskName TEXT,
       OrderIndex INTEGER,
       Status INTEGER,
       Color TEXT,
-      TopicID INTEGER
+      TopicID TEXT
       )
     ''');
   }
-
+// ------TOPIC------
   Future<List<Topic>> getTopics() async {
     Database db = await this.db;
-
+    // await db.execute("DROP TABLE IF EXISTS Tasks");
+    // await db.execute('''
+    //   CREATE TABLE
+    //   Tasks (
+    //   ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    //   TaskName TEXT,
+    //   OrderIndex INTEGER,
+    //   Status INTEGER,
+    //   Color TEXT,
+    //   TopicID TEXT
+    //   )
+    // ''');
     var Topics = await db.query('Topics', orderBy: 'OrderIndex');
     List<Topic> TopicsList = Topics.isNotEmpty?
     Topics.map((d) => Topic.fromMap(d)).toList() : [];
@@ -68,6 +79,43 @@ class dbHelper{
     Database db = await this.db;
     return await db.rawUpdate(
         'UPDATE Topics SET OrderIndex = ? WHERE id = ?',
+        [newIndex, id]);
+  }
+
+// ------TASKS------
+  Future<List<Task>> getTasks(String TopicID) async {
+    Database db = await this.db;
+
+    var Tasks = await db.query('Tasks', orderBy: 'OrderIndex', where: 'TopicID = ?', whereArgs: [TopicID]);
+    List<Task> TasksList = Tasks.isNotEmpty?
+    Tasks.map((d) => Task.fromMap(d)).toList() : [];
+    return TasksList;
+  }
+
+  Future<int> addTask (Task Task) async {
+    Database db = await this.db;
+    return await db.insert('Tasks', Task.toMap());
+  }
+  Future<int> removeTask (int id) async {
+    Database db = await this.db;
+    return await db.delete('Tasks', where: 'id = ?', whereArgs: [id]);
+  }
+  Future<int> updateTask (int id, String newName, String Color) async {
+    Database db = await this.db;
+    return await db.rawUpdate(
+        'UPDATE Tasks SET TaskName = ?, Color = ? WHERE id = ?',
+        [newName, Color, id]);
+  }
+  Future<int> updateTaskStatus (int id, int Status) async {
+    Database db = await this.db;
+    return await db.rawUpdate(
+        'UPDATE Tasks SET Status = ? WHERE id = ?',
+        [Status, id]);
+  }
+  Future<int> reoderTask (int id ,int newIndex) async {
+    Database db = await this.db;
+    return await db.rawUpdate(
+        'UPDATE Tasks SET OrderIndex = ? WHERE id = ?',
         [newIndex, id]);
   }
 

@@ -10,12 +10,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:checkly/utils/database_provider.dart';
+
+import '../model/db_models.dart';
 
 class Tasks extends StatefulWidget {
   final String topicID;
   final String topicName;
+  final String UID;
 
-  const Tasks({Key? key, required this.topicID, required this.topicName}) : super(key: key);
+  const Tasks({Key? key, required this.topicID, required this.topicName, required this.UID}) : super(key: key);
 
   @override
   _TasksState createState() => _TasksState();
@@ -23,6 +27,7 @@ class Tasks extends StatefulWidget {
 
 class _TasksState extends State<Tasks> {
   final textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Query tasks =
@@ -49,7 +54,9 @@ class _TasksState extends State<Tasks> {
                   //     itemBuilder: (context, index){
                   //       return WhiteCheckButton(text: todos[index].title);
                   //     }),
-                  child: StreamBuilder(
+                  child:
+                  widget.UID != "NoUser"?
+                  StreamBuilder(
                     stream: tasks.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
@@ -91,6 +98,52 @@ class _TasksState extends State<Tasks> {
                         },
                       );
                     },
+                  )
+                  : FutureBuilder(
+                    future: dbHelper.instance.getTasks(widget.topicID),
+                    builder: (context, AsyncSnapshot<List<Task>> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: Text("Loading..."),
+                        );
+                      }
+                      if(snapshot.data!.length == 0){
+                        return Center(
+                          child: Text("No Tasks Yet"),
+                        );
+                      }
+                      return ReorderableListView(
+                        children: snapshot.data!.map((task) {
+                          int status = task.Status;
+                          return WhiteCheckButton(
+                            key: ValueKey("${task.id}"),
+                            text: task.TasksName,
+                            color: task.Color,
+                            status: status == 0? false : true,
+                            onPress: ()async{
+                              if(status == 0){
+                                await dbHelper.instance.updateTaskStatus(task.id as int, 1);
+
+                              }else{
+                                await dbHelper.instance.updateTaskStatus(task.id as int, 0);
+                              }
+                              setState(() {});
+                            },
+                          );
+
+                        }).toList(),
+                        onReorder: (oldIndex, newIndex) {
+                          ReorderableListViewCheckly().onReorderTaskLocal(
+                              oldIndex, newIndex, snapshot);
+                          setState(() {});
+                        },
+                        proxyDecorator: (Widget child, int index,
+                            Animation<double> animation) {
+                          return ReorderableListViewCheckly()
+                              .proxyDecorator(child);
+                        },
+                      );
+                    },
                   ),
                 ),
               ),
@@ -108,8 +161,10 @@ class _TasksState extends State<Tasks> {
                           MaterialPageRoute(
                               builder: (context) => TasksEdit(
                                 topicID: widget.topicID,
-                                topicName: widget.topicName,)),
-                        );
+                                topicName: widget.topicName,
+                                UID: widget.UID,
+                              )),
+                        ).then((_) => setState(() {}));
                       },
                     ),
                   ],

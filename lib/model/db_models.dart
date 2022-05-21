@@ -30,7 +30,7 @@ class Task{
   final int OrderIndex;
   final int Status;
   final String Color;
-  final int TopicID;
+  final String TopicID;
 
   Task({
     this.id,
@@ -45,7 +45,7 @@ class Task{
     return{
       'ID': id,
       'OrderIndex': OrderIndex,
-      'TasksName': TasksName,
+      'TaskName': TasksName,
       'Status': Status,
       'Color': Color,
       'TopicID': TopicID,
@@ -53,7 +53,7 @@ class Task{
   }
   factory Task.fromMap(Map<String, dynamic> json) => Task(
     id: json['ID'],
-    TasksName: json['TasksName'],
+    TasksName: json['TaskName'],
     OrderIndex: json['OrderIndex'],
     Status: json['Status'],
     Color: json['Color'],

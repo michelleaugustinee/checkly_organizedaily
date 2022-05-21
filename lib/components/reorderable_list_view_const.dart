@@ -46,6 +46,24 @@ class ReorderableListViewCheckly{
     }
   }
 
+  onReorderTaskLocal(oldIndex, newIndex, snapshot){
+    if(newIndex > oldIndex){
+      for(int i = oldIndex + 1; i < newIndex; i++){
+        int id = snapshot.data.elementAt(i).id;
+        dbHelper.instance.reoderTask(id, i-1);
+      }
+      int id = snapshot.data.elementAt(oldIndex).id;
+      dbHelper.instance.reoderTask(id, newIndex-1);
+    }else{
+      for(int i = oldIndex - 1; i >= newIndex; i--){
+        int id = snapshot.data.elementAt(i).id;
+        dbHelper.instance.reoderTask(id, i+1);
+      }
+      int id = snapshot.data.elementAt(oldIndex).id;
+      dbHelper.instance.reoderTask(id, newIndex);
+    }
+  }
+
   proxyDecorator(child) {
     return Material(
       borderRadius: BorderRadius.circular(12),
