@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\Kevin Adhi\Kuliah\Semester 4\Mobile Programming\Flutter\flutter"
-export "FLUTTER_APPLICATION_PATH=C:\Kevin Adhi\Kuliah\Semester 4\Software Development\UAS\UAS\checkly_organizedaily"
+export "FLUTTER_ROOT=C:\Users\Michelle Augustine\Documents\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\Michelle Augustine\Documents\6 checkly_organizedaily\checkly_organizedaily"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib\main.dart"
 export "FLUTTER_BUILD_DIR=build"
