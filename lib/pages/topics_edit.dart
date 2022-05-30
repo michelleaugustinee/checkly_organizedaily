@@ -199,7 +199,7 @@ class _TopicsEditState extends State<TopicsEdit> {
                                     topics.add({
                                       'TopicName': _textFieldController.text,
                                       'OrderIndex': topicsCount,
-                                      'UserID': 'NoUser'
+                                      'UserID': widget.UID
                                     });
                                   }
 
