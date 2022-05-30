@@ -149,7 +149,7 @@ class _TopicsEditState extends State<TopicsEdit> {
                                 showConfirmationdDialog(
                                     context: context,
                                     title: "Confirm Delete",
-                                    label: "Are you sure want to delete this task?",
+                                    label: "Are you sure want to delete this topic?",
                                     onPress: () {
                                       int index = topic.OrderIndex;
                                       int id = topic.id as int;
